@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>A.I Artificer</title>
+<link href="images/ping.png" rel="icon" type="image/icon type"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://cdnjs.cloudflare.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;family=Ubuntu:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet"/>
+<link href="style.css" rel="stylesheet"/>
+</head>
+<body>
+<main>
+<canvas id="neuro"></canvas>
+<script id="vertShader" type="x-shader/x-fragment">
+        precision mediump float;
+    
+        varying vec2 vUv;
+        attribute vec2 a_position;
+    
+        void main() {
+            vUv = .5 * (a_position + 1.);
+            gl_Position = vec4(a_position, 0.0, 1.0);
+        }
+    </script>
+<script id="fragShader" type="x-shader/x-fragment">
+        precision mediump float;
+    
+        varying vec2 vUv;
+        uniform float u_time;
+        uniform float u_ratio;
+        uniform vec2 u_pointer_position;
+    
+        // Declare uniform variables for top, middle, and bottom colors
+        uniform vec3 u_top_color;
+        uniform vec3 u_middle_color;
+        uniform vec3 u_bottom_color;
+    
+        vec2 rotate(vec2 uv, float th) {
+            return mat2(cos(th), sin(th), -sin(th), cos(th)) * uv;
+        }
+    
+        float neuro_shape(vec2 uv, float t, float p) {
+            vec2 sine_acc = vec2(0.);
+            vec2 res = vec2(0.);
+            float scale = 8.;
+    
+            for (int j = 0; j < 12; j++) {
+                uv = rotate(uv, 1.);
+                sine_acc = rotate(sine_acc, 1.);
+                vec2 layer = uv * scale + float(j) + sine_acc - t;
+                sine_acc += sin(layer);
+                res += (.5 + .5 * cos(layer)) / scale;
+                scale *= (1.2 - .07 * p);
+            }
+            return res.x + res.y;
+        }
+    
+        void main() {
+            vec2 uv = .5 * vUv;
+            uv.x *= u_ratio;
+    
+            vec2 pointer = vUv - u_pointer_position;
+            pointer.x *= u_ratio;
+            float p = clamp(length(pointer), 0., 1.);
+            p = .5 * pow(1. - p, 2.);
+    
+            float t = .001 * u_time;
+            vec3 color = vec3(0.);
+    
+            float noise = neuro_shape(uv, t, p);
+            noise = 1.2 * pow(noise, 3.);
+            noise += pow(noise, 10.);
+            noise = max(.0, noise - .5);
+            noise *= (1. - length(vUv - .5));
+    
+            // Create a repeating pattern for top, middle, and bottom colors
+            float section = mod(vUv.y * 3.0, 3.0);
+    
+            if (section < 1.0) {
+                color = mix(u_top_color, u_middle_color, section);
+            } else if (section < 2.0) {
+                color = mix(u_middle_color, u_bottom_color, section - 1.0);
+            } else {
+                color = mix(u_bottom_color, u_top_color, section - 2.0);
+            }
+    
+            color = color * noise;
+            gl_FragColor = vec4(color, noise);
+        }
+    </script>
+<div class="scroll-up-btn">
+<i class="fa-solid fa-rocket"></i>
+</div>
+<nav class="navbar">
+<div class="max-width">
+<div class="logo">
+<a href="#home">Bipin<span> Chowdary</span></a>
+</div>
+<ul class="menu">
+<li><a class="menu-btn" href="#home">Home</a></li>
+<li><a class="menu-btn" href="#about">About</a></li>
+<li><a class="menu-btn" href="#Hobbies">Hobbies</a></li>
+<li><a class="menu-btn" href="#skills">Skills</a></li>
+<li><a class="menu-btn" href="#projects">Projects</a></li>
+<li><a class="menu-btn" href="#contact">Contact</a></li>
+</ul>
+<button aria-expanded="false" aria-label="Open navigation" class="nav-toggle">
+<i class="fas fa-bars"></i>
+</button>
+<div class="theme-selector">
+<button aria-label="Open theme selector" class="theme-toggle-btn" type="button">
+<i class="fas fa-jedi theme-icon"></i><span class="theme-text">Theme</span>
+</button>
+<div class="theme-dropdown">
+<div class="theme-option default-theme" data-theme="prime">
+<span class="theme-name">Prime</span>
+<div class="theme-colors">
+<div class="color-box" style="background-color: #cf0003;"></div>
+<div class="color-box" style="background-color: #ffe100;"></div>
+<div class="color-box" style="background-color: #ffffff;"></div>
+</div>
+</div>
+<div class="theme-option iron-theme" data-theme="iron">
+<span class="theme-name">IRONMAN</span>
+<div class="theme-colors">
+<div class="color-box" style="background-color: #fcbd2b;"></div>
+<div class="color-box" style="background-color: #e61c25;"></div>
+<div class="color-box" style="background-color: #ffffff;"></div>
+</div>
+</div>
+<div class="theme-option zeus-theme" data-theme="zeus">
+<span class="theme-name">ZEUCIFER</span>
+<div class="theme-colors">
+<div class="color-box" style="background-color: #ff0000;"></div>
+<div class="color-box" style="background-color: #000000;"></div>
+<div class="color-box" style="background-color: #333333;"></div>
+</div>
+</div>
+<div class="theme-option miami-theme" data-theme="miami">
+<span class="theme-name">Miami</span>
+<div class="theme-colors">
+<div class="color-box" style="background-color: #0059b3;"></div>
+<div class="color-box" style="background-color: #FF007F;"></div>
+<div class="color-box" style="background-color: #00ffee;"></div>
+</div>
+</div>
+<div class="theme-option black-theme" data-theme="black">
+<span class="theme-name">Black Ops</span>
+<div class="theme-colors">
+<div class="color-box" style="background-color: #FF6F00;"></div>
+<div class="color-box" style="background-color: #FFD700;"></div>
+<div class="color-box" style="background-color: #000000;"></div>
+</div>
+</div>
+<div class="theme-option hyper-theme" data-theme="hyper">
+<span class="theme-name">HyperSport</span>
+<div class="theme-colors">
+<div class="color-box" style="background-color: #0f0f3e;"></div>
+<div class="color-box" style="background-color: #ff4500;"></div>
+<div class="color-box" style="background-color: #88eee5;"></div>
+</div>
+</div>
+<div class="theme-option macha-theme" data-theme="mecha">
+<span class="theme-name">Royal</span>
+<div class="theme-colors">
+<div class="color-box" style="background-color: #e4aa4e;"></div>
+<div class="color-box" style="background-color: #12c983;"></div>
+<div class="color-box" style="background-color: #D4AF37;"></div>
+</div>
+</div>
+<div class="theme-option galactic-theme" data-theme="galactic">
+<span class="theme-name">Galactic</span>
+<div class="theme-colors">
+<div class="color-box" style="background-color: #f04556;"></div>
+<div class="color-box" style="background-color: #47bce6;"></div>
+<div class="color-box" style="background-color: #BFA8DC;"></div>
+</div>
+</div>
+<div class="theme-option cyber-theme" data-theme="cyber">
+<span class="theme-name">Cyberpunk</span>
+<div class="theme-colors">
+<div class="color-box" style="background-color: #0fff00;"></div>
+<div class="color-box" style="background-color: #00d9ff;"></div>
+<div class="color-box" style="background-color: #ff007f;"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+<!-- home section start -->
+<section class="home" id="home">
+<div class="max-width">
+<div class="home-content">
+<div class="text-1">Hello, my name is</div>
+<div class="images">
+<img class="shape" decoding="async" loading="eager" src="images/shape.png"/>
+<img class="boy2" decoding="async" loading="eager" src="images/eye.png"/>
+<img class="boy" decoding="async" fetchpriority="high" loading="eager" src="images/ZEUS.png"/>
+<img class="back" decoding="async" loading="eager" src="images/back.png"/>
+</div>
+<div class="text-2">Bipin Chowdary</div>
+<div class="text-3">And I'm a <span class="typing"></span></div>
+<a href="#contact">Let's Connect</a>
+</div>
+</div>
+</section>
+<!-- about section start -->
+<section class="about-container">
+<div class="about" id="about">
+<div class="max-width">
+<h2 class="title">About Me</h2>
+<h3 class="sub">Who I Am</h3>
+<div class="about-content">
+<div class="column left">
+<img alt="" decoding="async" loading="lazy" src="images/me.jpg"/>
+</div>
+<div class="column right">
+<div class="text">I'm Bipin and I'm a <span class="typing-2"></span></div>
+<p>Born on June 15, 2003, I was destined to be a seeker of knowledge and innovation. Under the sign of Sagittarius, I embody the spirit of a Logician - an individual fueled by ideas, brimming with energy, and driven by boundless optimism. Throughout my journey, I have passionately pursued my curiosity for Robotics and Artificial Intelligence, particularly in Research and Development. From designing drones and RC vehicles in childhood to advancing autonomous navigation and safety systems, my path reflects a deep commitment to innovation. As a wanderlust, I thrive on discovery and creative problem-solving, channeling these qualities into building an empire of technological excellence while envisioning a future where ambition and fulfillment align. My dedication to creating impactful technologies fuels my drive to shape the future of automation and intelligent systems.</p>
+<a href="https://www.instagram.com/bipin_chowdary8055" rel="noopener noreferrer" target="_blank">Explore My Highlights</a>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Hobbies section start -->
+<section class="Hobbies-container">
+<div class="Hobbies" id="Hobbies">
+<div class="max-width">
+<h2 class="title">My Hobbies</h2>
+<h3 class="sub">What I Do</h3>
+<div class="serv-content">
+<div class="card">
+<div class="box">
+<i class="fa-solid fa-gamepad"></i>
+<div class="text">Gaming and  Design</div>
+<p>Gaming fuels my creativity through game modding, game design, and character design. I explore art, generative art, and graphic design, blending machine design with immersive gameplay to craft unique experiences.</p>
+</div>
+</div>
+<div class="card">
+<div class="box">
+<i class="fa-solid fa-code"></i>
+<div class="text">Software Engineering</div>
+<p>Programming empowers me to solve complex problems using Python, neural networks, AI, ML, and deep learning. I specialize in developing efficient, optimized systems that tackle intricate challenges, streamline processes, and enhance performance across various domains, from automation to data analysis, making technology smarter and more impactful.</p>
+</div>
+</div>
+<div class="card">
+<div class="box">
+<i class="fa-solid fa-robot"></i>
+<div class="text">Robotics and Innovation</div>
+<p>In robotics and electronics, I combine AI and innovation to create projects that drive automation. From research and development to improving transportation systems, my work focuses on smarter, more efficient solutions.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- skills section start -->
+<section class="skills-container">
+<div class="skills" id="skills">
+<div class="max-width">
+<h2 class="title">My Skills</h2>
+<h3 class="sub">What I Know</h3>
+<div class="skills-content">
+<div class="column left">
+<div class="text">My creative skills &amp; experiences.</div>
+<p>Fueled by expertise in Electrical and Electronics Engineering (DEEE) and driven by a specialization in Artificial Intelligence and Machine Learning (BTech Hons), I have developed a diverse skill set that spans both technical and creative fields. My journey began with hands-on projects like building a hydraulic crane in 5th grade and later expanded to drones, RC cars, sensor-controlled trains, and even a smart city model. This early passion for creation propelled me into the world of AI and ML, where I deepened my expertise in solving complex problems through technology. I am proficient in Python with extensive experience in machine learning algorithms and deep learning frameworks like TensorFlow, PyTorch, and Scikit-learn. My robotics expertise includes working with ROS, Gazebo, and Arduino to design autonomous systems. Additionally, I bring a creative edge with skills in photo and video editing using tools such as Photoshop, Kinemaster, After Effects, and Adobe Premiere Pro, blending creativity with technology in my projects. I am driven by the goal of integrating AI and robotics to address real-world challenges, creating impactful technologies that shape the future of intelligent systems and automation.</p>
+</div>
+<div class="column right">
+<div class="bars">
+<div class="info">
+<span>CODING AND DEVELOPMENT</span>
+<span>69%</span>
+</div>
+<div class="line html"></div>
+</div>
+<div class="bars">
+<div class="info">
+<span>RESEARCH AND PROBLEM SOLVING</span>
+<span>80%</span>
+</div>
+<div class="line css"></div>
+</div>
+<div class="bars">
+<div class="info">
+<span>ROBOTICS AND AUTOMATION</span>
+<span>70%</span>
+</div>
+<div class="line js"></div>
+</div>
+<div class="bars">
+<div class="info">
+<span>SOFT SKILLS AND COMMUNICATION</span>
+<span>75%</span>
+</div>
+<div class="line php"></div>
+</div>
+<div class="bars">
+<div class="info">
+<span>GAMING AND CREATIVE DESIGN</span>
+<span>80%</span>
+</div>
+<div class="line mysql"></div>
+</div>
+<div class="read-cv-container">
+<!-- Read CV link directly under the right column -->
+<a class="read-cv" href="images/Optimised CV.pdf" rel="noopener noreferrer" target="_blank">Optimised CV</a>
+<a class="read-cv" href="images/Detailed CV.pdf" rel="noopener noreferrer" target="_blank">Detailed CV</a>
+<a class="read-cv2" href="images/Creative CV.pdf" rel="noopener noreferrer" target="_blank">Creative CV</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Projects section start -->
+<section class="projects-container" id="projects">
+<div class="max-width">
+<h2 class="title">My Projects</h2>
+<h3 class="sub">What I've Built</h3>
+<div class="projects">
+<div class="card side-card" data-index="0">
+<div class="card-content">
+<div class="card-left">
+<img alt="Fuel Efficiency Prediction" decoding="async" height="900" loading="lazy" src="images/FUEL.jpg" width="1600"/>
+<a href="https://projectfuel.streamlit.app/" rel="noopener noreferrer" target="_blank">
+<button class="explore-btn">Check Project</button>
+</a>
+</div>
+<div class="card-right">
+<h2>Fuel Efficiency Prediction to Reduce Carbon Emissions</h2>
+<p>This project uses machine learning to predict fuel efficiency, providing actionable insights to reduce carbon emissions. By analyzing large datasets and training models, it delivers accurate predictions for improving fuel consumption strategies. The application supports industries and individuals in transitioning toward greener energy practices, leveraging tools like Streamlit for faster data processing.</p>
+<ul class="card-points">
+<li>Accurate ML Models</li>
+<li>Environmental Impact</li>
+<li>Optimized Processing</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="card side-card" data-index="1">
+<div class="card-content">
+<div class="card-left">
+<img alt="Autonomous Smart City" decoding="async" height="900" loading="lazy" src="images/AUTO.jpg" width="1600"/>
+<a href="https://youtu.be/2per8ebqmmw?si=CFhJo19_WKYJ1Bg9" rel="noopener noreferrer" target="_blank">
+<button class="explore-btn">Check Project</button>
+</a>
+</div>
+<div class="card-right">
+<h2>Autonomous Smart City</h2>
+<p>Focused on integrating robotics and automation into urban environments, this project features a pilot-less railway system and a remote-operated construction crane. These innovations enhance operational precision and reliability, demonstrating the potential for automation in construction and infrastructure while aligning with Industry 4.0 goals.</p>
+<ul class="card-points">
+<li>Urban Automation</li>
+<li>Human Error Reduction</li>
+<li>Advanced Robotics</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="card side-card" data-index="2">
+<div class="card-content">
+<div class="card-left">
+<img alt="DCGAN" decoding="async" height="900" loading="lazy" src="images/GGD.jpg" width="1600"/>
+<a href="https://bipinchowdary.github.io/DCGAN/" rel="noopener noreferrer" target="_blank">
+<button class="explore-btn">Check Project</button>
+</a>
+</div>
+<div class="card-right">
+<h2>Deep Convolutional Generative Adversarial Networks (DCGAN)</h2>
+<p>This project develops advanced DCGAN architectures to generate high-quality, realistic images. With a 90% success rate, the model showcases innovative deep learning techniques, paving the way for creative applications in art generation, data augmentation, and beyond.</p>
+<ul class="card-points">
+<li>Image Realism</li>
+<li>Generative Creativity</li>
+<li>Reliable Models</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="card side-card" data-index="4">
+<div class="card-content">
+<div class="card-left">
+<img alt="Marvel Nex" decoding="async" height="900" loading="lazy" src="images/NEX.jpg" width="1600"/>
+<a href="https://bipinchowdary.github.io/marvelnex/" rel="noopener noreferrer" target="_blank">
+<button class="explore-btn">Check Project</button>
+</a>
+</div>
+<div class="card-right">
+<h2>Marvel Nex</h2>
+<p>A dynamic web-based platform aimed at improving the educational experience, Marvel Nex connects faculty with students and simplifies course purchases. The intuitive interface fosters an efficient ecosystem for academic interactions, providing a personalized and seamless learning experience.</p>
+<ul class="card-points">
+<li>Faculty Connection</li>
+<li>Seamless Transactions</li>
+<li>Enhanced Learning</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="card side-card" data-index="3">
+<div class="card-content">
+<div class="card-left">
+<img alt="4-Omni Wheeled Robot" decoding="async" height="900" loading="lazy" src="images/ROBO.jpg" width="1600"/>
+<a href="https://bipinchowdary.github.io/OMNI/" rel="noopener noreferrer" target="_blank">
+<button class="explore-btn">Check Project</button>
+</a>
+</div>
+<div class="card-right">
+<h2>Navigation of 4-Omni Wheeled Robot</h2>
+<p>This robotics project focuses on designing navigation algorithms for a 4-omni-wheeled robot. Gradient-based methods enhance pathfinding efficiency by 40%, while predictive control ensures stable obstacle avoidance, making it ideal for industrial and autonomous applications.</p>
+<ul class="card-points">
+<li>Efficient Pathfinding</li>
+<li>Predictive Control</li>
+<li>Industrial Application</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="card side-card" data-index="5">
+<div class="card-content">
+<div class="card-left">
+<img alt="Crowd Management" decoding="async" height="900" loading="lazy" src="images/CMAD.jpg" width="1600"/>
+<a href="https://bipinchowdary.github.io/CMAD/" rel="noopener noreferrer" target="_blank">
+<button class="explore-btn">Check Project</button>
+</a>
+</div>
+<div class="card-right">
+<h2>Crowd Management and Anomaly Detection</h2>
+<p>This project utilizes computer vision to analyze crowd behavior and detect anomalies in real-time. By ensuring timely responses to potential threats, it enhances public safety and is ideal for application in stadiums, events, and public spaces.</p>
+<ul class="card-points">
+<li>Real-Time Safety</li>
+<li>Threat Detection</li>
+<li>Public Space Monitoring</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="navigation-dots"></div>
+</section>
+<!-- Projects section end -->
+<!-- contact section start -->
+<section class="contact-container">
+<div class="contact" id="contact">
+<div class="max-width">
+<h2 class="title">Contact Me</h2>
+<h3 class="sub">Get In Touch</h3>
+<div class="contact-content">
+<div class="column left">
+<div class="text">Get in Touch</div>
+<div class="icons">
+<div class="row">
+<i class="fa-solid fa-user-secret" style="font-size: 40px;"></i>
+<div class="info">
+<div class="head">Name</div>
+<div class="sub-title">Bipin Chowdary</div>
+</div>
+</div>
+<div class="row">
+<i class="fa-solid fa-street-view" style="font-size: 40px;"></i>
+<div class="info">
+<div class="head">Address</div>
+<div class="sub-title">Miami, Florida</div>
+</div>
+</div>
+<div class="row">
+<i class="fa-solid fa-satellite" style="font-size: 39px; transform: rotate(-90deg);"></i>
+<div class="info">
+<div class="head">Email</div>
+<div class="sub-title">Bipin.chowdary8055@gmail.com</div>
+</div>
+</div>
+</div>
+</div>
+<div class="column right">
+<div class="text"></div>
+<div class="icons-row">
+<a class="glassIco" href="https://www.instagram.com/bipin_chowdary8055/" rel="noopener noreferrer" target="_blank">
+<i class="fab fa-instagram" style="font-size: 60px;"></i>
+</a>
+<a class="glassIco" href="https://www.linkedin.com/in/bipin-chowdary8055" rel="noopener noreferrer" target="_blank">
+<i class="fab fa-linkedin-in" style="font-size: 50px;"></i>
+</a>
+<a class="glassIco" href="https://twitter.com/Mrlucifer8055" rel="noopener noreferrer" target="_blank">
+<i class="fab fa-twitter" style="font-size: 50px;"></i>
+</a>
+<a class="glassIco" href="https://discord.com/users/603942281749200915" rel="noopener noreferrer" target="_blank">
+<i class="fab fa-discord" style="font-size: 45px;"></i>
+</a>
+<a class="glassIco" href="https://github.com/BipinChowdary" rel="noopener noreferrer" target="_blank">
+<i class="fab fa-github" style="font-size: 50px;"></i>
+</a>
+<a class="glassIco" href="https://api.whatsapp.com/send/?phone=919666743456&amp;text&amp;app_absent=0" rel="noopener noreferrer" target="_blank">
+<i class="fab fa-whatsapp" style="font-size: 50px;"></i>
+</a>
+<a class="glassIco" href="https://t.me/BipinChowdary" rel="noopener noreferrer" target="_blank">
+<i class="fab fa-telegram-plane" style="font-size: 50px;"></i>
+</a>
+<a class="glassIco" href="https://www.youtube.com/@BipinChowdary" rel="noopener noreferrer" target="_blank">
+<i class="fab fa-youtube" style="font-size: 50px;"></i>
+</a>
+<a href="https://open.spotify.com/user/31cti5gmrmvy7cakvq54nzojcsma?fbclid=IwAR0t98WwG8PuPwe5Wz5LJiJqR0STG8rwTR0uIhF4oBKYvpTME7QM5kHPk7k" rel="noopener noreferrer" target="_blank">
+<i class="fab fa-spotify" style="font-size: 50px;"></i>
+</a>
+<a class="glassIco" href="https://www.facebook.com/bipin.vadlamudi.8055" rel="noopener noreferrer" target="_blank">
+<i class="fab fa-facebook-f" style="font-size: 50px;"></i>
+</a>
+</div>
+<div class="footer-text">
+<span class="footer-prefix">Created By</span>
+<a href="https://www.linkedin.com/in/bipin-chowdary8055/" rel="noopener noreferrer" target="_blank">Bipin Chowdary</a>
+<span class="footer-rights">All rights reserved till <span class="bow" id="hidden-icon">⋈</span></span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<script defer="" src="script.js"></script>
+</body>
+</html>

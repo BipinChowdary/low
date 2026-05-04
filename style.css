@@ -1,0 +1,4042 @@
+/*  import google fonts */
+/* Step 1: Define the font with @font-face */
+@font-face {
+  font-family: 'CustomFont';
+  src: url('images/Font.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'sign';
+  src: url('images/sign.ttf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+/* Remove the static image background */
+
+/* Step 2: Apply the font family to elements */
+body, .footer-text, .contact-container {
+  font-family: 'CustomFont', sans-serif;
+}
+
+
+:root {
+  --primary-color: #cf0003;  /* Soft Coral */
+  --secondary-color: #ffe100;  /* Warm Orange */
+  --background: url("images/glow.jpg"); /* Warm gradient */
+  --text-color: #000000;  /* Bright Cyan */
+  --text-hover: #ffffff;  /* Tomato */
+  --shine: rgba(255, 255, 255, 0.484);  /* Light Coral */
+  --text-alt: #ffffff;  /* Light Coral */
+  --glass: rgba(255, 255, 255, 0.453);  /* Subtle glass effect */
+  --hover: rgba(255, 22, 22, 0.321);  /* Golden Yellow */
+  --top-bar: #ff0000;  /* Bold Red */
+  --top: #23d9f9;  /* Warm Yellow */
+  --middle: #7000df;  /* Warm Orange */
+  --bottom: #ff181c;  /* Soft Coral */
+}
+
+html {
+  scroll-padding-top: 100px; /* Adjust the value based on the height of your menu */
+}
+
+h1 {
+  color: var(--primary-color);
+}
+
+h2 {
+  color: var(--secondary-color);
+}
+
+body {
+  background-color: var(--text-alt);
+  color: var(--text-color);
+}
+
+/* CSS for the theme selector */
+.theme-selector {
+  display: inline-block;
+  position: relative;
+}
+/* Show dropdown on hover of the theme selector */
+.theme-dropdown {
+  /* existing styles */
+  overflow-y: hidden; /* Add this to hide the vertical scrollbar */
+}
+
+.theme-dropdown::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for Webkit-based browsers */
+}
+.theme-text {
+  display: inline; /* Text visible in larger screens */
+}
+
+/* Default style (Windowed Mode - Desktop/Laptop) */
+.theme-toggle-btn {
+    padding: 10px 20px;
+    background: var(--glass);
+    color: var(--primary-color);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    z-index: 10; /* Ensure it's above other elements */
+}
+
+.theme-icon {
+    display: none; /* Hide icon in windowed view */
+}
+
+.theme-text {
+    display: inline; /* Show text in windowed view */
+}
+
+
+/* Mobile View */
+@media (max-width: 768px) {
+    /* Transform theme button to circular icon */
+
+
+    .theme-icon {
+        display: block; /* Show icon in mobile view */
+    }
+
+    .theme-text {
+        display: none; /* Hide text in mobile view */
+    }
+
+    /* Position the dropdown above the button */
+
+}
+
+.theme-toggle-btn {
+  padding: 8px 16px;
+  color: var(--text-color); /* Text color */
+  background: var(--glass); /* Glass effect background */
+  border: 3px solid var(--primary-color); /* Glass effect border */
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: CustomFont, sans-serif;
+  font-size: 14px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+  backdrop-filter: blur(10px); /* Blur effect */
+  -webkit-backdrop-filter: blur(10px); /* Blur effect for Safari */
+  transition: all 0.3s ease; /* Smooth transition */
+  position: relative; /* For the shine effect positioning */
+  overflow: hidden; /* Ensure no overflow */
+}
+
+.theme-toggle-btn:hover {
+  color: var(--primary-color); /* Change text color to white on hover */
+  background: rgba(255, 255, 255, 0.3); /* Slightly brighter background on hover */
+  border: 3px solid var(--primary-color);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+  backdrop-filter: blur(20px); /* More blur on hover */
+  -webkit-backdrop-filter: blur(20px); /* More blur for Safari */
+}
+
+/* Add shine effect on hover */
+.theme-toggle-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--shine), transparent);
+  transition: transform 0.5s ease; /* Smooth transition for shine effect */
+  pointer-events: none; /* Prevent interaction */
+}
+
+.theme-toggle-btn:hover::before {
+  transform: translateX(200%); /* Move shine effect across the button */
+}
+
+/* Initially hide the dropdown */
+.theme-dropdown {
+  position: absolute;
+  top: 52px;
+  right: 0px;
+  background: rgba(255, 255, 255, 0.318)!important; /* Glass effect background */
+  border: 3px solid rgba(255, 255, 255, 0.5)!important; /* Glass effect border */
+  border-radius: 10px;
+  padding: 10px;
+  overflow: hidden;
+  width: 250px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1)!important;
+  backdrop-filter: blur(10px)!important; /* Blur effect */
+  -webkit-backdrop-filter: blur(10px)!important; /* Blur effect for Safari */
+  z-index: 9999;
+  transition: max-height 0.5s ease, opacity 0.5s ease, visibility 0.5s ease;
+
+  /* Hidden state */
+  max-height: 0;
+  opacity: 0;
+  visibility: hidden;
+  overflow: hidden;
+}
+
+/* Show dropdown on hover of the theme selector */
+.theme-selector:hover .theme-dropdown {
+  max-height: 500px; /* Adjust according to content height */
+  opacity: 1;
+  visibility: visible;
+  overflow: auto; /* Ensure all options are visible */
+}
+.theme-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 5px;
+  padding: 7px;
+  background: rgba(255, 255, 255, 0.256); /* Glass effect background */
+  border: 2px solid rgba(255, 255, 255, 0.3); /* Glass effect border */
+  border-radius: 10px;
+  transition: all 0.3s ease; /* Smooth transition */
+  cursor: pointer;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+  backdrop-filter: blur(10px); /* Blur effect */
+  -webkit-backdrop-filter: blur(10px); /* Blur effect for Safari */
+  position: relative; /* For the shine effect positioning */
+  overflow: hidden; /* Ensure no overflow */
+}
+
+.theme-option:hover {
+  background: rgba(255, 255, 255, 0.3); /* Slightly brighter background on hover */
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+  backdrop-filter: blur(20px); /* More blur on hover */
+  -webkit-backdrop-filter: blur(20px); /* More blur for Safari */
+}
+
+/* Add shine effect on hover */
+.theme-option::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--shine), transparent);
+  transition: transform 0.5s ease; /* Smooth transition for shine effect */
+  pointer-events: none; /* Prevent interaction */
+}
+
+.theme-option:hover::before {
+  transform: translateX(200%); /* Move shine effect across the option */
+}
+
+.theme-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #000000;
+}
+
+.theme-colors {
+  display: flex;
+  gap: 5px;
+}
+
+.color-box {
+  width: 30px;
+  height: 20px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Highlight the selected theme */
+.theme-option.selected {
+  background-color: #e0e0e0;
+  border: 3px solid var(--primary-color);
+  margin: 2px;
+}
+
+
+/* Miami Theme */
+.theme-miami {
+  --primary-color: #0059b3;   /* Bright Orange */
+  --secondary-color: #FF007F; /* Hot Pink */
+  --background: url("images/rogb.jpg");
+  --text-color: #000000;  /* Ivory White */
+  --text-hover: #FFD700;  /* Gold */
+  --text-alt: #00ffee;  /* Cyan */
+  --shine: rgba(255, 255, 255, 0.4);  /* Subtle Glass Shine */
+  --glass: linear-gradient(45deg, rgba(232, 201, 201, 0.6), rgba(255, 0, 255, 0.2)); /* Dark + Magenta Tint Glass Effect */
+  --hover: #ff4400a1;  /* Orange-Red */
+  --top-bar: #FF007F;  /* Hot Pink */
+  --top: #FF8C00;  /* Bright Orange */
+  --middle: #FF007F;  /* Hot Pink */
+  --bottom: #6A0DAD;  /* Deep Purple */
+}
+
+/* ZEUCIFER Theme */
+.theme-zeus {
+  --primary-color: #ff0000;  /* Fiery Red */
+  --secondary-color: #000000;  /* Black */
+  --background: linear-gradient(145deg, #ffffff, #ffffff);  /* Red to Black */
+  --text-color: #000000;  /* White */
+  --text-hover: #ffffffc7;  /* Orange hover effect */
+  --text-alt: #333333;  /* Dark Grey for subtle contrast */
+  --shine: rgba(249, 0, 0, 0.484);
+  --glass: rgba(218, 218, 218, 0.51);  /* Dark glass effect */
+  --hover: #ff0000c2;  /* Vibrant Orange */
+  --top-bar: #ff0000;  /* Bright Red */
+  --top: #000000;  /* Fiery Red */
+  --middle: #ff0000;  /* Deep Black */
+  --bottom: #000000;  /* Dark Grey */
+}
+
+/* IRONMAN Theme */
+.theme-iron {
+  --primary-color: #fcbd2b; /* Deep Red (Iron Man's Armor) */
+  --secondary-color: #e61c25; /* Gold (Armor Accents) */
+  --background: url('images/iman.jpg');
+  --shadow:#49494987; 
+  --text-color:#c4fcff;  /* White (Text Inspired by Armor Glow) */
+  --text-hover: #003a45;  /* Gold (Visible Contrast) */
+  --text-alt: #ffffff;  /* Navy Blue (Alternate Text for Subtle Elements) */
+  --shine: rgba(255, 191, 54, 0.5);  /* Subtle Golden Shine for Highlights */
+  --glass: #a050506d; /* Deep Red for Glass Effect */
+  --hover: #ffb300c1;  /* Gold (Hover for Cards) */
+  --top-bar: #A9232A;  /* Deep Red (Top Bar) */
+  --top: #3f0303; /* Navy Blue (Background Gradient Start) */
+  --middle: #dbc200;  /* Dark Brown (Middle Section) */
+  --bottom: #5b0005;  /* Deep Red (Gradient End) */
+}
+
+/* Call of Duty Black Ops Theme */
+.theme-black {
+  --primary-color: #FF6F00;   
+  --secondary-color: #FFD700; 
+  --background: url("images/zone.jpg");
+  --text-color: #F5F5F5;  
+  --text-hover: #4c1400; 
+  --text-alt: #FFD700;  
+  --shadow:#000000;  
+  --shine: rgba(255, 255, 255, 0.5);  
+  --glass: rgba(0, 0, 0, 0.545); 
+  --hover: #ff8c00cc;  
+  --top-bar: #FF6F00;  
+  --top: #1A1A1A;  
+  --middle: #FF6F00; 
+  --bottom: #111111;  
+}
+
+/* Hypersport Theme */
+.theme-hyper {
+  --primary-color: #0f0f3e;  /* Dark Blue */
+  --secondary-color: #ff4500;  /* Vivid Orange */
+  --background: linear-gradient(45deg, #0f0f3e, #ff4500);  /* Blue to Orange Gradient */
+  --text-color: #420000;  /* White */
+  --text-hover: #0f0f3e;  /* Warm Orange Hover */
+  --text-alt: #88eee5;  /* Light Turquoise */
+  --shine: rgba(255, 255, 255, 0.484);
+  --glass: rgba(255, 255, 255, 0.3);  /* Slightly darker glass effect */
+  --hover: #ff8c0082;  /* Warm Orange */
+  --top-bar: #000000;  /* Black for depth */
+  --top: #0f0f3e;  /* Dark Blue */
+  --middle: #ff4500;  /* Vivid Orange */
+  --bottom: #ff8c00;  /* Warm Orange */
+}
+
+/* Galactic Theme */
+.theme-galactic {
+  --primary-color: #f04556;  /* Dark Purple (Galaxy Core) */
+  --secondary-color: #47bce6; /* Vibrant Purple (Nebulae) */
+  --background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 800 800'%3E%3Cg fill='none' stroke='%23404' stroke-width='1'%3E%3Cpath d='M769 229L1037 260.9M927 880L731 737 520 660 309 538 40 599 295 764 126.5 879.5 40 599-197 493 102 382-31 229 126.5 79.5-69-63'/%3E%3Cpath d='M-31 229L237 261 390 382 603 493 308.5 537.5 101.5 381.5M370 905L295 764'/%3E%3Cpath d='M520 660L578 842 731 737 840 599 603 493 520 660 295 764 309 538 390 382 539 269 769 229 577.5 41.5 370 105 295 -36 126.5 79.5 237 261 102 382 40 599 -69 737 127 880'/%3E%3Cpath d='M520-140L578.5 42.5 731-63M603 493L539 269 237 261 370 105M902 382L539 269M390 382L102 382'/%3E%3Cpath d='M-222 42L126.5 79.5 370 105 539 269 577.5 41.5 927 80 769 229 902 382 603 493 731 737M295-36L577.5 41.5M578 842L295 764M40-201L127 80M102 382L-261 269'/%3E%3C/g%3E%3Cg fill='%23505'%3E%3Ccircle cx='769' cy='229' r='6'/%3E%3Ccircle cx='539' cy='269' r='6'/%3E%3Ccircle cx='603' cy='493' r='6'/%3E%3Ccircle cx='731' cy='737' r='6'/%3E%3Ccircle cx='520' cy='660' r='6'/%3E%3Ccircle cx='309' cy='538' r='6'/%3E%3Ccircle cx='295' cy='764' r='6'/%3E%3Ccircle cx='40' cy='599' r='6'/%3E%3Ccircle cx='102' cy='382' r='6'/%3E%3Ccircle cx='127' cy='80' r='6'/%3E%3Ccircle cx='370' cy='105' r='6'/%3E%3Ccircle cx='578' cy='42' r='6'/%3E%3Ccircle cx='237' cy='261' r='6'/%3E%3Ccircle cx='390' cy='382' r='6'/%3E%3C/g%3E%3C/svg%3E");
+  --text-color: #cff6f3;  /* Starlight White (Bright Text) */
+  --text-hover: #100f2f;  /* Light Purple (Hover Text) */
+  --text-alt: #BFA8DC;  /* Soft Lavender (Alternate Text) */
+  --shine: rgba(255, 255, 255, 0.5);  /* Subtle White Shine */
+  --glass: rgba(59, 10, 69, 0.6); /* Dark Purple for Glass Effect */
+  --hover: #c79bd87d;  /* Pastel Purple (Hover for Cards) */
+  --top-bar: #3B0A45;  /* Dark Purple (Top Bar) */
+  --top: #2E1A47;  /* Deep Space Purple (Background Gradient Start) */
+  --middle: #4C2B6F; /* Nebula Purple (Middle Section) */
+  --bottom: #8B5AA3;  /* Galaxy Purple (Gradient End) */
+}
+
+/* MechaCore Theme */
+.theme-mecha {
+  --primary-color: #e4aa4e;  /* Mecha Black */
+  --secondary-color: #D4AF37; /* Mecha Gold */
+  --background: url("images/meg2.jpg");
+  --text-color: #D4AF37;  /* Mecha White */
+  --text-hover: #B3B3B3;  /* Metallic Gray (Hover Text) */
+  --text-alt: #12c983;  /* Light Metallic Gray (Alternate Text) */
+  --shine: rgba(212, 175, 55, 0.5);  /* Mecha Gold Shine */
+  --glass: rgba(0, 222, 41, 0.071); /* Mecha Black for Glass Effect */
+  --hover: #00000090;  /* Bright Red (Hover for Cards) */
+  --top-bar: #0A0A0A;  /* Mecha Black (Top Bar) */
+  --top: #0C0C0C;  /* Dark Mecha Gray (Background Gradient Start) */
+  --middle: #D4AF37; /* Mecha Gray (Middle Section) */
+  --bottom: #1A1A1A;  /* Dark Gray (Gradient End) */
+}
+
+/* Cyberpunk Theme */
+.theme-cyber {
+  --primary-color: #0fff00;  /* Neon Green */
+  --secondary-color: #00d9ff;  /* Cyan */
+  --background: linear-gradient(45deg, #1e1e1e, #1f1f1f);   /* Cyberpunk City Background */
+  --text-color: #ff007f;  /* Neon Pink */
+  --text-hover: #00d9ff;  /* Hover with Neon Cyan */
+  --text-alt: #00b894;  /* Aqua */
+  --shine: rgba(255, 255, 255, 0.484);
+  --glass: rgba(0, 0, 0, 0.5);  /* Dark Glass Effect */
+  --hover: #ff008057;  /* Neon Pink Hover */
+  --top-bar: #0fff00;  /* Neon Green */
+  --top: #0fff00;  /* Neon Green */
+  --middle: #00d9ff;  /* Cyan */
+  --bottom: #ff007f;  /* Neon Pink */
+}
+
+/* Global styling for body and text depending on the theme */
+
+body.theme-miami {
+  background-color: var(--text-color);
+  color: var(--text-alt);
+}
+
+body.theme-zeus {
+  background-color: var(--text-color);
+  color: var(--text-alt);
+}
+
+body.theme-iron {
+  background-color: var(--text-color);
+  color: var(--text-alt);
+}
+
+body.theme-black {
+  background-color: var(--text-color);
+  color: var(--text-alt);
+}
+
+body.theme-hyper {
+  background-color: var(--text-color);
+  color: var(--text-alt);
+}
+
+body.theme-galactic {
+  background-color: var(--text-color);
+  color: var(--text-alt);
+}
+
+body.theme-mecha {
+  background-color: var(--text-color);
+  color: var(--text-alt);
+}
+
+body.theme-cyber {
+  background-color: var(--text-color);
+  color: var(--text-alt);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+}
+html {
+  scroll-behavior: smooth;
+}
+
+/* custom scroll bar */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: var(--text-color);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* all similar content styling codes */
+section {
+  padding: 100px 0;
+}
+.max-width {
+  max-width: 1500px;
+  padding: 0 90px;
+  margin: auto;
+}
+.about-container, .Hobbies-container, .skills-container, .projects-container, .contact-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.about, .Hobbies, .skills, .projects, .contact {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.about,
+.Hobbies,
+.skills,
+.projects,
+.contact,
+footer {
+  font-family: "Poppins", sans-serif;
+}
+.about .about-content,
+.Hobbies .serv-content,
+.skills .skills-content,
+.projects .projects-content,
+.contact .contact-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+section .title {
+  position: relative;
+  text-align: center;
+  font-size: 40px;
+  font-weight: 500;
+  margin-bottom: 60px;
+  padding-bottom: 20px;
+  font-family: "CustomFont", sans-serif;
+}
+section .title::before {
+  content: "";
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  width: 180px;
+  height: 3px;
+  background: var(--text-color);
+  transform: translateX(-50%);
+}
+section .title::after {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  font-size: 20px;
+  color: var(--primary-color);
+  padding: 0 5px;
+  background: var(--text-alt);
+  transform: translateX(-50%);
+}
+
+/* navbar styling */
+.navbar {
+  position: fixed;
+  width: 100%;
+  z-index: 999;
+  padding: 30px 0;
+  font-family: "CustomFont", sans-serif;
+  transition: all 0.3s ease;
+}
+.navbar.sticky {
+  pointer-events: auto;
+  z-index: 999;
+  padding: 9px 0;
+  color: var(--primary-color);
+  background: var(--glass);/* Glass effect background */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 3px solid rgba(255, 255, 255, 0.564); /* Border for glass effect */
+  border-radius: 10px; /* Optional: Rounded corners */
+  transition: all 0.3s ease; /* Smooth transitions */
+  overflow: visible; /* Ensure no overflow */
+}
+
+/* Shine effect for .navbar.sticky */
+.navbar.sticky::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--shine), transparent);
+  transition: transform 0.5s ease;
+  pointer-events: none;
+}
+
+.navbar.sticky:hover {
+  background: color-mix(in srgb, var(--glass) 80%, transparent);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 3px solid rgba(255, 255, 255, 0.5);
+}
+
+.navbar.sticky:hover::before {
+  transform: translateX(200%);
+}
+
+.navbar .max-width {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.navbar .logo a {
+  color: transparent;
+  font-size: 35px;
+  font-weight: 400;
+  padding-top: -80px;
+}
+.navbar .logo a span {
+  color: transparent;
+}
+.navbar.sticky .logo a span {
+  color: var(--primary-color);
+  text-shadow: 0px 1px 3px #000000be;
+  transition: all 0.3s ease;
+}
+.navbar.sticky .logo a {
+  color: var(--primary-color);
+  text-shadow: 0px 1px 3px #000000be;
+  transition: all 0.3s ease;
+}
+.navbar .menu li {
+  list-style: none;
+  display: inline-block;
+}
+.navbar .menu li a {
+  display: block;
+  color: var(--text-alt);
+  font-size: 18px;
+  font-weight: 500;
+  margin-left: 25px;
+  transition: color 0.3s ease;
+}
+.navbar .menu li a:hover {
+  color: var(--primary-color);
+}
+.navbar.sticky .menu li a:hover {
+  color: var(--primary-color);
+  text-shadow: 0px 1px 3px #000000be;
+}
+
+/* menu btn styling */
+
+/* Media query for mobile view */
+@media (max-width: 768px) {
+
+  /* Theme button changes to circular icon */
+  .theme-toggle-btn {
+      padding: 12px;
+      background:rgba(255, 255, 255, 0.382);
+      color: var(--primary-color);
+      border-radius: 30%;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      font-size: 18px;
+      width: 42px;
+      height: 42px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      top: 4px; 
+      margin-top: -25px;/* Position above the scroll-up button */
+      right: 0px; /* Adjust this for fine-tuning */
+  }
+  .theme-toggle-btn.show {
+    bottom: 30px; /* Moves the button into view */
+    pointer-events: fill;
+    opacity: 1; /* Makes it visible */
+    pointer-events: auto; /* Enable interaction */
+  }
+  .theme-text {
+      display: none; /* Hide text in mobile view */
+  }
+
+  /* Scroll-up button adjustment */
+  .scroll-up-btn {
+      position: relative;
+  }
+
+
+}
+.scroll-up-btn {
+  pointer-events: auto;
+  position: fixed;
+  height: 40px;
+  width: 40px;
+  transform: rotate(-45deg);
+  background: var(--glass);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  right: 30px;
+  bottom: 10px;
+  text-align: center;
+  padding-right: 3px;
+  line-height: 38px;
+  color: var(--primary-color);
+  z-index: 9999;
+  font-size: 25px;
+  border-radius: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.677);
+  border-bottom-width: 2px;
+  cursor: pointer;
+  opacity: 0; /* Hidden by default */
+ /* Disable interaction when hidden */
+  transition: all 0.3s ease;
+}
+
+.scroll-up-btn.show {
+  bottom: 30px; /* Moves the button into view */
+  pointer-events: fill;
+  opacity: 1; /* Makes it visible */
+  pointer-events: auto; /* Enable interaction */
+}
+
+.scroll-up-btn:hover {
+  background: var(--primary-color); /* Slightly brighter background on hover */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  color: #fff;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 3px solid rgba(255, 255, 255, 0.5);
+}
+body {
+  margin: 0;
+  overflow-x: hidden;
+  background: #070100; /* Fallback color */
+}
+
+#neuro {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: var(--background); 
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  z-index: -1; /* Ensure it's behind the content */
+  pointer-events: none; /* Disable interactions with the canvas */
+  opacity: 1; /* Full opacity for the animation */
+  transition: opacity 0.5s ease, background-image 0.5s ease;
+}
+
+/* home section styling */
+.home {
+  scroll-snap-align: center;
+  display: flex;
+  color: var(--text-alt);
+  min-height: 100vh;
+  font-family: "CustomFont", sans-serif;
+  position: relative;
+  overflow: hidden;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 5; /* Ensure it's above the canvas */
+}
+
+.images {
+  width: 50vw;
+  height: 70vh;
+  position: absolute;
+  text-shadow: 0px 0px 10px var(--shadow);
+  bottom: 0;
+  right: 15px;
+  z-index: 1; /* Content stays above the canvas */
+}
+
+.images img {
+  max-width: 90%;
+  height: auto;
+  position: absolute;
+  left: 50%;
+  text-shadow: 0px 0px 10px var(--shadow);
+  bottom: 0;
+  transform: translateX(-50%);
+  transition: bottom 1s, left 1s;
+}
+
+.images .shape {
+  filter: drop-shadow(0px 1000px 0 var(--primary-color)); /* Apply primary color only to shape and back */
+  transform: translateY(-1000px); /* Ensure the shadow aligns with the image */
+  position: absolute;
+  left: 40px;
+  bottom: 0;
+}
+
+.images .back {
+  filter: drop-shadow(0px 1000px 0 var(--secondary-color)); /* Apply primary color only to shape and back */
+  transform: translateY(-1000px); /* Ensure the shadow aligns with the image */
+  position: absolute;
+  left: 40px;
+  z-index: 3;
+  bottom: 0;
+}
+
+@media (max-width: 600px) {
+  .images {
+    width: 120vw;
+    height: 120vh;
+    left: 47%;
+    bottom: 0;
+    transform: translateX(-50%);
+    right: unset;
+  }
+}
+
+.images:hover .shape {
+  bottom: 40px;
+}
+
+
+.images:hover .back {
+  z-index: 3;
+  right: 45%;
+}
+.images .boy,
+.images .boy2 {
+  position: absolute;
+  left: 50%; /* Default position */
+  bottom: 0;
+  transform: translateX(-50%);
+  transition: left 1s ease, opacity 1s ease; /* Smooth position and opacity transitions */
+  opacity: 1; /* Default opacity */
+}
+
+.images .boy2 {
+  z-index: 2; /* Ensure boy2 is above boy */
+  opacity: 0; /* Initially hidden */
+}
+
+.images:hover .boy {
+  left: 45%; /* Smooth move */
+  opacity: 1; /* Maintain visibility until boy2 fully transitions */
+  z-index: 1; /* Move behind boy2 during hover */
+}
+
+.images:hover .boy2 {
+  left: 45%; /* Smooth move */
+  opacity: 1; /* Fully visible boy2 */
+  z-index: 3; /* Ensure it’s above boy */
+}
+
+.home-content {
+  margin-top: -80px;
+  text-shadow: 0px 0px 10px var(--shadow);
+}
+.home-content a {
+  margin-top: auto;
+  text-shadow: 0px 0px 0px var(--shadow);
+}
+
+.home .max-width {
+  width: 100%;
+  display: flex;
+}
+.home .max-width .row {
+  margin-right: 0;
+}
+.home .home-content .text-1 {
+  font-size: 27px;
+}
+.home .home-content .text-2 {
+  font-size: 80px;
+  font-family: sign;
+  font-weight: 100;
+  margin-left: -3px;
+}
+.home .home-content .text-3 {
+  font-size: 40px;
+  margin: 5px 0;
+}
+.home .home-content .text-3 span {
+  color: var(--primary-color);
+  font-weight: 500;
+  text-shadow: 0px 0px 10px var(--shadow);
+}
+.home .home-content .text-1,
+.home .home-content .text-2,
+.home .home-content .text-3, 
+.home .home-content a {
+  display: block;
+}
+
+@media (max-width: 600px) {
+  .home .home-content .text-1,
+  .home .home-content .text-2,
+  .home .home-content .text-3,
+  .home .home-content a  {
+    display: none;
+  }
+}
+
+.home .home-content a {
+  display: inline-block;
+  color: var(--text-alt);
+  font-size: 25px;
+  padding: 9px 12px;
+  margin-top: 20px;
+  font-weight: 400;
+  border-radius: 6px;
+  border: 2px solid var(--primary-color);
+  transition: all 0.3s ease;
+  background: var(--primary-color); /* Glass effect background */
+  backdrop-filter: blur(10px); /* Blur effect */
+  -webkit-backdrop-filter: blur(10px); /* Blur effect for Safari */
+  position: relative;
+  overflow: hidden; /* Prevent overflow */
+}
+
+.home .home-content a:hover {
+  color: var(--primary-color);
+  background: var(--text-alt); /* Slightly brighter background on hover */
+  border: 2px solid var(--text-alt); /* Maintain border */
+  box-shadow: 0 0 25px var(--primary-color), 0 0 50px var(--primary-color), 
+              0 0 75px var(--hover); /* Neon glow effect on hover */
+}
+
+/* Add shine effect */
+.home .home-content a::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--shine), transparent);
+  transition: transform 0.5s ease; /* Smooth transition for shine effect */
+  pointer-events: none; /* Prevent interaction */
+}
+
+.home .home-content a:hover::before {
+  transform: translateX(200%); /* Move shine effect across the button */
+}
+
+/* Add neon glow pulse effect */
+.home .home-content a:hover::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 140%;
+  height: 140%;
+  border-radius: 12px;
+  box-shadow: 0 0 30px var(--hover), 0 0 60px var(--primary-color), 
+              0 0 90px var(--primary-color);
+  opacity: 0.7;
+  pointer-events: none;
+  z-index: -1; /* Keeps the glow behind the button */
+}
+
+@media (max-width: 600px) {
+  .home .home-content a {
+    display: none;
+  }
+}
+body {
+  overflow-x: hidden; /* This hides the horizontal scrollbar on the entire page */
+}
+
+.glass-container {
+  overflow-x: hidden; /* This hides the horizontal scrollbar on the glass container */
+}
+
+html {
+  overflow-y: scroll; /* Enables vertical scrolling */
+  scrollbar-width: none; /* Hides the scrollbar in Firefox */
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px;
+}
+
+
+/* about section styling */
+
+.about-container {
+  scroll-snap-align: center;
+  position: relative;
+  width: 100vw; /* Ensure it spans the full viewport width */
+  height: 100vh; /* Occupies the full viewport height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px; /* 10px gap on all sides */
+  box-sizing: border-box;
+  padding-top: 78px;
+  margin-top: -50px;
+}
+
+.about {
+  position: relative;
+  color: var(--text-color);
+  background: var(--glass);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 40px; /* Inner spacing for content */
+  width: calc(100% - 40px); /* Full width with padding subtracted */
+  height: calc(100% - 40px); /* Full height with padding subtracted */
+  box-sizing: border-box;
+  border-radius: 20px; /* Rounded corners */
+  border: 3px solid rgba(255, 255, 255, 0.564); /* Border for glass effect */
+  transition: all 0.3s ease; /* Smooth transitions */
+  overflow: hidden; /* Ensure no overflow */
+  padding-bottom: 80px;
+  scroll-margin-top: 80px; /* Adjust the scroll position to account for the menu */
+}
+
+.about:hover {
+  background: var(--glass); /* Slightly brighter background on hover */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 3px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Add shine effect on hover */
+.about::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--shine), transparent);
+  transition: transform 0.5s ease;
+  pointer-events: none;
+}
+
+.about:hover::before {
+  transform: translateX(200%);
+}
+
+/* About content styles */
+.title {
+  text-align: center;
+  margin-top: 0px;
+}
+
+h2.title::before {
+  content: none; /* Remove the ::before pseudo-element */
+}
+
+h3 {
+  color: var(--primary-color); /* Use the theme's primary color */
+}
+.about .title {
+  text-align: center;
+  position: absolute; /* Allows precise positioning */
+  top: 33px; /* Adjust as needed */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Center horizontally */
+  margin-bottom: 10px; /* Adjust space below "About Me" */
+}
+
+/* Positioning and styling for "Who I Am" */
+.about .sub {
+  white-space: nowrap; /* Prevent text from wrapping */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute; /* Allows precise positioning */
+  top: 70px; /* Adjust as needed to place just below "About Me" */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Center horizontally */
+  margin-bottom: 0; /* Remove space below "Who I Am" */
+}
+
+/* Add pseudo-elements for bars on both sides */
+.about .sub::before, .about .sub::after {
+  content: '';
+  position: absolute;
+  width: 43px; /* Adjust the width of the bars */
+  max-height: 0px; /* Adjust the height of the bars as needed */
+  background-color: white; /* Use white color for the bars */
+}
+
+.about .sub::before {
+  left: -60px; /* Adjust the position of the left bar */
+}
+
+.about .sub::after {
+  right: -60px; /* Adjust the position of the right bar */
+}
+.about .about-content {
+  display: flex;
+  margin-top: 50px;
+  flex-wrap: wrap;
+  border-radius: 20px;  
+  height: 100%;
+  align-items: center;
+  justify-content: center; /* Center the content vertically */
+  gap: 30px;
+}
+
+
+.about .about-content .left {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  width: 100%;
+  position: relative;
+  background: rgba(255, 255, 255, 0.256); /* Glass effect background */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+  backdrop-filter: blur(10px); /* Blur effect */
+  -webkit-backdrop-filter: blur(10px); /* Blur effect for Safari */
+  border-radius: 20px; /* Rounded corners */
+  border: 3px solid rgba(255, 255, 255, 0.3); /* Border for glass effect */
+  transition: all 0.3s ease; /* Smooth transitions */
+  overflow: hidden; /* Ensure no overflow */
+}
+
+.about .about-content .left:hover {
+  background: rgba(255, 255, 255, 0.4); /* Slightly brighter background on hover */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+  backdrop-filter: blur(20px); /* More blur on hover */
+  -webkit-backdrop-filter: blur(20px); /* More blur for Safari */
+  border: 3px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Add shine effect on hover */
+.about .about-content .left::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--shine), transparent);
+  transition: transform 0.5s ease; /* Smooth transition for shine effect */
+  pointer-events: none; /* Prevent interaction */
+}
+
+.about .about-content .left:hover::before {
+  transform: translateX(200%); /* Move shine effect across the element */
+}
+
+.about .about-content .left img {
+  height: auto;
+  width: 100%;
+  max-width: 400px;
+  object-fit: cover;
+  border-radius: 20px; /* Ensure image corners match the container's rounded corners */
+}
+
+.about .about-content .right {
+  flex: 2;
+  margin-left: 40px;
+}
+
+.about .about-content .right .text {
+  font-size: 25px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.about .about-content .right .text span {
+  color: var(--primary-color); /* Use theme's primary color */
+}
+
+.about .about-content .right p {
+  text-align: justify;
+}
+
+.about .about-content .right a {
+  display: inline-block;
+  color: var(--text-alt);
+  text-shadow: 0px 0px 11px var(--shadow);
+  font-size: 20px;
+  font-weight: 500;
+  padding: 10px 30px;
+  margin-top: 20px;
+  border-radius: 6px;
+  border: 2px solid var(--primary-color);
+  transition: all 0.3s ease;
+  background: var(--primary-color); /* Default background */
+  backdrop-filter: blur(10px); /* Glass effect */
+  -webkit-backdrop-filter: blur(10px); /* Glass effect for Safari */
+  position: relative;
+  overflow: hidden;
+}
+
+.about .about-content .right a:hover {
+  color: var(--primary-color);
+  background: var(--text-alt); /* Change to alternate color on hover */
+  border: 2px solid var(--text-alt); /* Change border color on hover */
+  box-shadow: 0 0 25px var(--primary-color), 0 0 50px var(--primary-color), 
+              0 0 75px var(--hover); /* Neon glow effect on hover */
+}
+
+/* Add shine effect */
+.about .about-content .right a::before {
+  content: '';
+  position: absolute;             
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--shine), transparent);
+  transition: transform 0.5s ease; /* Smooth shine transition */
+  pointer-events: none; /* Prevent interaction */
+}
+
+.about .about-content .right a:hover::before {
+  transform: translateX(200%); /* Move shine across the button */
+}
+
+/* Add neon glow pulse effect */
+.about .about-content .right a:hover::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 140%;
+  height: 140%;
+  border-radius: 12px;
+  box-shadow: 0 0 30px var(--hover), 0 0 60px var(--primary-color), 
+              0 0 90px var(--primary-color);
+  opacity: 0.7;
+  pointer-events: none;
+  z-index: -1; /* Keeps glow behind the button */
+}
+
+/* Common glassmorphism effect for all themes */
+.about {
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+
+/* Hobbies section styling */
+/* General Styling for Subtitles */
+.sub {
+  display: flex;
+  align-items: center;
+  top: -78px;
+  text-align: center;
+  margin: 0;
+  justify-content: center;
+  position: relative;
+}
+
+/* Specific Subtitles for Hobbies and Favourites */
+.Favourites .sub::before, 
+.Favourites .sub::after, 
+.projects-container .sub::before, 
+.projects-container .sub::after, 
+.Hobbies .sub::before, 
+.Hobbies .sub::after {
+  content: "";
+  height: 5px;
+  flex: 0 1 40px;
+  border-bottom: 3.5px solid var(--text-alt); /* Use the background color */
+  margin: 0 10px;
+}
+
+/* Specific Subtitles for About, Skills, and Contact */
+.about .sub::before,
+.about .sub::after,
+.skills .sub::before,
+.skills .sub::after,
+.contact .sub::before,
+.contact .sub::after {
+  content: "";
+  height: 5px;
+  flex: 0 1 40px;
+  border-bottom: 3.5px solid var(--text-alt); /* Use the text color */
+  margin: 0 10px
+}
+/* General styling for the container */
+.Hobbies-container, .Favourites-container {
+  scroll-snap-align: center;
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+/* Title styling */
+.Hobbies .title::before, .Favourites .title::before {
+  background: var(--text-alt);
+}
+.Hobbies, .Favourites {
+  background: transparent;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+h2.title::before {
+  content: none; /* Remove the ::before pseudo-element */
+}
+
+h3 {
+  color: var(--primary-color); /* Use the theme's primary color */
+}
+
+/* Card styling */
+.Hobbies .serv-content .card, .Favourites .serv-content .card {
+  width: calc(33% - 20px);
+  max-width: 1100px;
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); /* Use the card background color with glass effect */
+  text-align: center;
+  border-radius: 16px;
+  margin-top: 20px;
+  padding: 70px 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(6.2px); /* Apply the glass effect */
+  -webkit-backdrop-filter: blur(6.2px); /* Apply the glass effect for webkit browsers */
+  border: 3px solid rgba(255, 255, 255, 0.5);
+  position: relative; /* For the shine effect positioning */
+  overflow: hidden;
+}
+
+/* Hover effects */
+/* Hover effects for the card */
+.Hobbies .serv-content .card:hover, .Favourites .serv-content .card:hover {
+  background: var(--hover); /* Use primary color on hover */
+}
+
+/* Text color change on hover */
+.Hobbies .serv-content .card:hover .box .text, .Favourites .serv-content .card:hover .box .text {
+  color: var(--text-hover); /* Change text color on hover */
+}
+
+.Hobbies .serv-content .card .box, .Favourites .serv-content .card .box {
+  transition: all 0.3s ease;
+  margin-top: -50px;
+}
+
+.Hobbies .serv-content .card:hover .box, .Favourites .serv-content .card:hover .box {
+  transform: scale(1.05);
+}
+
+.Hobbies .serv-content .card i, .Favourites .serv-content .card i {
+  font-size: 90px;
+  color: var(--primary-color);
+  text-shadow: 0.4px 0.4px 0px currentColor, -0.4px 0.4px 0px currentColor, 
+                     0.4px -0.4px 0px currentColor, -0.4px -0.4px 0px currentColor;
+  transition: color 0.3s ease;
+}
+
+.Hobbies .serv-content .card:hover i, .Favourites .serv-content .card:hover i {
+  color: var(--text-hover);
+}
+
+.Hobbies .serv-content .card:hover p, .Favourites .serv-content .card:hover p {
+  color: var(--text-hover);
+}
+
+.Hobbies .serv-content .card .text, .Favourites .serv-content .card .text {
+  font-size: 25px;
+  font-weight: 500;
+  margin: 0px 0 7px 0; /* Transition for text color change */
+}
+
+/* Add shine effect on hover */
+.Hobbies .serv-content .card::before, .Favourites .serv-content .card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--shine), transparent);
+  transition: transform 0.5s ease; /* Smooth transition for shine effect */
+  pointer-events: none; /* Prevent interaction */
+}
+
+.Hobbies .serv-content .card:hover::before, .Favourites .serv-content .card:hover::before {
+  transform: translateX(200%); /* Move shine effect across the card */
+}
+
+/* skills section styling */
+
+.skills-container {
+  position: relative;
+  width: 100vw; /* Ensure it spans the full viewport width */
+  height: 100vh; /* Occupies the full viewport height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px; /* 10px gap on all sides */
+  box-sizing: border-box;
+  padding-top: 78px;
+  margin-top: -80px;
+}
+
+.skills {
+  position: relative;
+  color: var(--text-color);
+  background: var(--glass);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding-top: 40px; /* Inner spacing for content */
+  width: calc(100% - 40px); /* Full width with padding subtracted */
+  height: calc(100% - 40px); /* Full height with padding subtracted */
+  box-sizing: border-box;
+  border-radius: 20px; /* Rounded corners */
+  border: 3px solid rgba(255, 255, 255, 0.564); /* Border for glass effect */
+  transition: all 0.3s ease; /* Smooth transitions */
+  overflow: hidden; /* Ensure no overflow */
+  padding-bottom: 80px;
+  scroll-margin-top: 80px; /* Adjust the scroll position to account for the menu */
+}
+
+.skills:hover {
+  background: var(--glass); /* Slightly brighter background on hover */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 3px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Add shine effect on hover */
+.skills::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--shine), transparent);
+  transition: transform 0.5s ease;
+  pointer-events: none;
+}
+
+.skills:hover::before {
+  transform: translateX(200%);
+}
+
+/* About content styles */
+.title {
+  text-align: center;
+  margin-bottom: 10px;
+  margin-top: -10px;
+}
+.skills .title {
+  text-align: center;
+  margin-top: 10px;
+}
+
+h2.title::before {
+  content: none; /* Remove the ::before pseudo-element */
+}
+
+h3 {
+  color: var(--primary-color); /* Use the theme's primary color */
+}
+.title {
+  text-align: center;
+  margin-bottom: 10px; /* Reduce this value to decrease the gap */
+}
+
+.sub {
+  margin-top: 10px;
+  margin-bottom: -50px; /* Adjust this value to control the gap after the title */
+}
+
+.skills .skills-content .column {
+  width: calc(50% - 10px);
+}
+
+.skills .skills-content .left .text {
+  font-size: 20px;
+  font-weight: 600;
+  padding: 0px;
+  margin-bottom: 10px;
+}
+
+.skills .skills-content .left p {
+  text-align: justify;
+  font-weight: 100;
+  padding: 0px;
+}
+
+/* Read CV link container */
+.read-cv-container {
+  display: flex;
+  justify-content: space-between;  /* Spread the items out evenly */
+  align-items: center;  /* Vertically align the items */
+  margin-top: 20px;  /* Adjust gap between bars and CV links */
+  width: 100%;  /* Ensure the container spans the full width */
+}
+.read-cv {
+  display: inline-block;
+  justify-content: space-between;
+  background: var(--primary-color); /* Default background */
+  color: var(--text-alt); /* Dynamic text color */
+  text-shadow: 0px 0px 9px var(--shadow);
+  font-size: 18px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 9px;
+  border: 2px solid var(--primary-color);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+  backdrop-filter: blur(10px); /* Glass effect */
+  -webkit-backdrop-filter: blur(10px); /* Glass effect for Safari */
+  position: relative;
+  overflow: hidden; /* Ensure no overflow */
+  margin-right: 90px;
+  text-align: center;
+}
+
+.read-cv2 {
+  display: inline-block;
+  justify-content: space-between;
+  background: var(--primary-color); /* Default background */
+  color: var(--text-alt); /* Dynamic text color */
+  text-shadow: 0px 0px 9px var(--shadow);
+  font-size: 18px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 2px solid var(--primary-color);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+  backdrop-filter: blur(10px); /* Glass effect */
+  -webkit-backdrop-filter: blur(10px); /* Glass effect for Safari */
+  position: relative;
+  overflow: hidden; /* Ensure no overflow */
+  margin-left: 0px;
+  text-align: center;
+}
+
+/* Hover effect on Read CV link */
+.read-cv:hover {
+  color: var(--primary-color); /* Change text color on hover */
+  background: var(--text-alt); /* Change background on hover */
+  border: 2px solid var(--text-alt); /* Change border color on hover */
+  box-shadow: 0 0 25px var(--primary-color), 0 0 50px var(--primary-color), 
+              0 0 75px var(--hover); /* Neon glow effect on hover */
+}
+
+/* Add shine effect */
+.read-cv::before {
+  content: '';
+  position: absolute;             
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--shine), transparent);
+  transition: transform 0.5s ease; /* Smooth shine transition */
+  pointer-events: none; /* Prevent interaction */
+}
+
+.read-cv:hover::before {
+  transform: translateX(200%); /* Move shine across the button */
+}
+
+/* Add neon glow pulse effect */
+.read-cv2:hover::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 140%;
+  height: 140%;
+  border-radius: 12px;
+  box-shadow: 0 0 30px var(--hover), 0 0 60px var(--primary-color), 
+              0 0 90px var(--primary-color);
+  opacity: 0.7;
+  pointer-events: none;
+  z-index: -1; /* Keeps glow behind the button */
+}
+/* Hover effect on Read CV link */
+.read-cv2:hover {
+  color: var(--primary-color); /* Change text color on hover */
+  background: var(--text-alt); /* Change background on hover */
+  border: 2px solid var(--text-alt); /* Change border color on hover */
+  box-shadow: 0 0 25px var(--primary-color), 0 0 50px var(--primary-color), 
+              0 0 75px var(--hover); /* Neon glow effect on hover */
+}
+
+/* Add shine effect */
+.read-cv2::before {
+  content: '';
+  position: absolute;             
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--shine), transparent);
+  transition: transform 0.5s ease; /* Smooth shine transition */
+  pointer-events: none; /* Prevent interaction */
+}
+
+.read-cv2:hover::before {
+  transform: translateX(200%); /* Move shine across the button */
+}
+
+/* Add neon glow pulse effect */
+.read-cv2:hover::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 140%;
+  height: 140%;
+  border-radius: 12px;
+  box-shadow: 0 0 30px var(--hover), 0 0 60px var(--primary-color), 
+              0 0 90px var(--primary-color);
+  opacity: 0.7;
+  pointer-events: none;
+  z-index: -1; /* Keeps glow behind the button */
+}
+
+.skills .skills-content .right .bars {
+  margin-bottom: 25px;
+  position: relative; /* Needed for the shine effect */
+  border-radius: 10px; /* Rounded corners for the bars */
+  background: rgba(255, 255, 255, 0.045); /* Glass effect background */
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 2px solid rgba(255, 255, 255, 0.3); /* Border for glass effect */
+  transition: all 0.3s ease; /* Smooth transitions */
+  overflow: hidden; /* Ensure no overflow */
+}
+
+.skills .skills-content .right .bars:hover {
+  background: var(--glass); /* Slightly brighter background on hover */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Add shine effect on hover */
+.skills .skills-content .right .bars::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--shine), transparent);
+  transition: transform 0.5s ease;
+  pointer-events: none;
+}
+
+.skills .skills-content .right .bars:hover::before {
+  transform: translateX(200%);
+}
+
+.skills .skills-content .right .info {
+  display: flex;
+  margin-bottom: 3px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.skills .skills-content .right span {
+  font-weight: 500;
+  font-size: 18px;
+  margin-left: 8px;
+  margin-right: 10px;
+}
+
+.skills .skills-content .right .line {
+  height: 20px;
+  width: 100%;
+  background: lightgrey;
+  position: relative;
+  border-radius: 5px; /* Rounded corners for the progress bar */
+}
+
+.skills .skills-content .right .line::before {
+  content: "";
+  position: absolute;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background: var(--primary-color); /* Dynamic progress bar color */
+  border-radius: 5px; /* Ensure the progress bar has rounded corners */
+}
+
+.skills-content .right .html::before {
+  width: 69%;
+}
+
+.skills-content .right .css::before {
+  width: 80%;
+}
+
+.skills-content .right .js::before {
+  width: 70%;
+}
+
+.skills-content .right .php::before {
+  width: 75%;
+}
+
+.skills-content .right .mysql::before {
+  width: 80%;
+}
+
+.skills {
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.title {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+h2.title::before {
+  content: none; /* Remove the ::before pseudo-element */
+}
+
+h2 {
+  color: var(--secondary-color); /* Use your primary color */
+  text-shadow: 
+    0 0 9px rgba(6, 6, 6, 0.8); /* Light white shadow for clarity */
+  margin: 0; /* Optional: Remove any default margin */
+  font-weight: bold; /* Make text bolder for better visibility */
+}
+
+h3 {
+  color: var(--primary-color); /* Use the theme's primary color */
+}
+/* Target the max-width class within the projects section */
+/* Projects Section */
+.projects-container .max-width {
+  width: 100%;
+  margin-top: -110px;
+}
+
+.projects-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  margin-top: 90px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+
+.projects {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 60vh;
+  position: relative;
+}
+
+.card {
+  position: absolute;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  background: var(--glass);
+  border: 3px solid rgba(255, 255, 255, 0.625);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  margin-top: 60px;
+  cursor: pointer;
+  overflow: hidden;
+  width: 90%;
+  height: 120%;
+  transform-origin: center center;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.card:hover {
+  background: var(--glass);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 3px solid var(--shine);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--shine), transparent);
+  transition: transform 0.5s ease;
+  pointer-events: none;
+}
+
+.card:hover::before {
+  transform: translateX(200%);
+}
+.main-card {
+  transform: translateX(0) scale(1);
+  z-index: 3;
+}
+
+.side-card {
+  width: 29%;
+  pointer-events: auto;
+  padding: 50px;
+}
+
+/* Card Content Layout */
+.card-content {
+  display: flex;
+  width: 100%;
+  height: 100%; /* Ensures full height usage */
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center; /* Centers content vertically */
+}
+/* Opacity for Side Cards */
+.side-card .card-right, 
+.side-card .card-left {
+  opacity: 0; /* Reduce opacity for idle side cards */
+  transition: opacity 0.3s ease; /* Smooth transition */
+}
+
+.side-card:hover .card-right, 
+.side-card:hover .card-left {
+  opacity: 0; /* Full opacity on hover */
+}
+
+
+/* Left Side: Image, Button */
+.card-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Ensures equal gap between elements */
+  align-items: center;
+  height: 100%;
+  gap: 1rem; /* Equal gap between the elements */
+  background: var(--glass);
+  padding: 2rem; /* Add some padding to the left side */
+}
+
+/* Ensure image size fits properly */
+.card-left img {
+  width: 100%;
+  max-width: 500px;
+  margin-top: 30px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 3px solid rgba(255, 255, 255, 0.51);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover effect for the image */
+.card-left img:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 25px var(--primary-color), 0 0 50px var(--hover), 0 0 75px var(--text-alt);
+  border-color: var(--shine);
+}
+
+/* Explore Button */
+.explore-btn {
+  padding: 10px 20px;
+  background: var(--primary-color);
+  color: var(--text-alt);
+  border: none;
+  border-radius: 8px;
+  margin-bottom: 50px;
+  font-size: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  flex-grow: 0; /* Prevents button from growing, keeps its size fixed */
+}
+
+/* Hover effect for the button */
+.explore-btn:hover {
+  background: var(--text-alt);
+  color: var(--primary-color);
+  box-shadow: 0 0 10px var(--hover), 0 0 20px var(--primary-color);
+}
+
+/* Before pseudo-element for button hover */
+.explore-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--shine), transparent);
+  transition: transform 0.5s ease;
+  pointer-events: none;
+}
+
+.explore-btn:hover::before {
+  transform: translateX(200%);
+}
+
+/* Right Side: Title, Description, and Points */
+.card-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Aligns content to the top */
+  padding: 1.5rem;
+  gap: 1rem;
+}
+
+.card-right h2 {
+  font-size: 1.8rem;
+  color: var(--secondary-color);
+  margin: 0;
+}
+
+.card-right p {
+  font-size: 18px;
+  color: var(--text-color);
+  line-height: 1.5;
+  text-align: justify;
+}
+
+/* Points list, moved under the description */
+.card-points {
+  list-style-type: disc;
+  list-style-position: inside;
+  text-align: left;
+  margin: 0;
+  padding-left: 0;
+  padding-top: 1rem;
+  flex-grow: 1;
+  overflow: hidden; /* Prevents overflow if content exceeds size */
+}
+
+/* Style list items */
+.card-points li {
+  font-size: 18px;
+  color: var(--text-color);
+  margin: 5px 0;
+  text-shadow: 0 0 5px var(--shadow);
+}
+
+/* Customize the point dots */
+.card-points li::marker {
+  color: var(--primary-color); 
+  font-size: 1.2rem;
+}
+
+
+.navigation-dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.navigation-dots {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  z-index: 10;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-top: -25px;
+  background: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.dot:hover{
+  transform: scale(1.2);
+  background: var(--primary-color);
+}
+
+.dot.active {
+  background: var(--primary-color);
+  transform: scale(1.2);
+}
+.contact .title {
+  text-align: center;
+  position: absolute; /* Allows precise positioning */
+  top: 33px; /* Adjust as needed */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Center horizontally */
+  margin-bottom: 10px; /* Adjust space below "About Me" */
+}
+
+/* Positioning and styling for "Who I Am" */
+.contact .sub {
+  white-space: nowrap; /* Prevent text from wrapping */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute; /* Allows precise positioning */
+  top: 70px; /* Adjust as needed to place just below "About Me" */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Center horizontally */
+  margin-bottom: 0; /* Remove space below "Who I Am" */
+}
+
+/* Add pseudo-elements for bars on both sides */
+.contact .sub::before, .contact .sub::after {
+  content: '';
+  position: absolute;
+  width: 43px; /* Adjust the width of the bars */
+  max-height: 0px; /* Adjust the height of the bars as needed */
+  background-color: white; /* Use white color for the bars */
+}
+
+.contact .sub::before {
+  left: -60px; /* Adjust the position of the left bar */
+}
+
+.contact .sub::after {
+  right: -60px; /* Adjust the position of the right bar */
+}
+/* Contact section styling */
+.contact-container {
+  position: relative;
+  width: 100vw; /* Ensure it spans the full viewport width */
+  height: 100vh; /* Occupies the full viewport height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px; /* 10px gap on all sides */
+  box-sizing: border-box;
+  padding-top: 80px;
+  margin-top: -80px;
+}
+
+.contact {
+  position: relative;
+  color: var(--text-color);
+  background: var(--glass); /* Updated glass effect with primary color tint */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 40px; /* Inner spacing for content */
+  width: calc(100% - 40px); /* Full width with padding subtracted */
+  height: calc(100% - 40px); /* Full height with padding subtracted */
+  box-sizing: border-box;
+  border-radius: 20px; /* Rounded corners */
+  border: 3px solid rgba(255, 255, 255, 0.5); /* Border for glass effect */
+  transition: all 0.3s ease; /* Smooth transitions */
+  overflow: hidden; /* Ensure no overflow */
+  padding-bottom: 80px;
+  scroll-margin-top: 80px; /* Adjust the scroll position to account for the menu */
+}
+
+.contact:hover {
+  background: var(--glass); /* Slightly brighter background on hover */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 3px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Add shine effect on hover */
+.contact::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--shine), transparent);
+  transition: transform 0.5s ease;
+  pointer-events: none;
+}
+
+.contact:hover::before {
+  transform: translateX(200%);
+}
+
+.contact .contact-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px; /* Space between left and right columns */
+  padding: 40px; /* Inner spacing for content */
+  margin-top: 170px;
+}
+
+.contact .contact-content .column.left {
+  flex: 4; /* 70% width */
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Gap between inner elements */
+}
+
+.contact .contact-content .column.right {
+  flex: 3; /* 30% width */
+  display: flex;
+  margin-top: -50px;
+  padding: 40px;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.contact .contact-content .text {
+  font-size: 35px;
+  font-weight: 600;
+  margin-top: 0px;
+}
+
+.contact .contact-content .left {
+  position: relative;
+  color: var(--text-color);
+  background: var(--glass), 0.4; /* Updated glass effect with primary color tint */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 20px;
+  width: 90%; /* Adjusted width */
+  height: 80%; /* Adjusted height */
+  box-sizing: border-box;
+  border-radius: 20px;
+  margin-left: -90px;
+  margin-top: -50px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.contact .contact-content .left:hover {
+  background: var(--glass), 0.4; /* Slightly brighter background on hover */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 3px solid rgba(255, 255, 255, 0.5);
+}
+
+.contact .contact-content .left::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--shine), transparent);
+  transition: transform 0.5s ease;
+  pointer-events: none;
+}
+
+.contact .contact-content .left:hover::before {
+  transform: translateX(200%);
+}
+
+.contact .contact-content .left p {
+  text-align: justify;
+}
+
+.contact .contact-content .row {
+  display: flex;
+  height: 100px;
+  align-items: center;
+  position: relative;
+  color: var(--text-color);
+  background: var(--glass); /* Updated glass effect with primary color tint */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 20px;
+  width: 100%;
+  height: auto;
+  font-weight: 700;
+  box-sizing: border-box;
+  border-radius: 10px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.contact .contact-content .row:hover {
+  background: var(--glass); /* Slightly brighter background on hover */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 3px solid rgba(255, 255, 255, 0.5);
+}
+
+.contact .contact-content .row::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--shine), transparent);
+  transition: transform 0.5s ease;
+  pointer-events: none;
+}
+
+.contact .contact-content .row:hover::before {
+  transform: translateX(200%);
+}
+
+.contact .contact-content .row .info {
+  margin-left: 30px;
+}
+
+.contact .contact-content .row i {
+  font-size: 25px;
+  color: var(--primary-color);
+}
+
+.contact .contact-content .info .head {
+  font-weight: 500;
+}
+
+.contact .contact-content .info .sub-title {
+  color: var(--primary-color);
+}
+
+.contact .contact-content .right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  background: var(--glass); /* Updated glass effect with primary color tint */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+  backdrop-filter: blur(10px); /* Blur effect */
+  -webkit-backdrop-filter: blur(10px); /* Blur effect for Safari */
+  padding: 20px; 
+  margin-right: -90px;
+  margin-top: -90px;/* Inner spacing */
+  width: 100%; /* Full width within its column */
+  height: auto;
+  box-sizing: border-box;
+  border-radius: 20px; /* Rounded corners */
+  border: 3px solid rgba(255, 255, 255, 0.3); /* Border for glass effect */
+  transition: all 0.3s ease; /* Smooth transitions */
+  overflow: hidden; /* Ensure no overflow */
+}
+
+.contact .contact-content .right:hover {
+  background: var(--glass); /* Slightly brighter background on hover */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 3px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Add shine effect on hover */
+.contact .contact-content .right::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--shine), transparent);
+  transition: transform 0.5s ease; /* Smooth transition for shine effect */
+  pointer-events: none; /* Prevent interaction */
+}
+
+.contact .contact-content .right:hover::before {
+  transform: translateX(200%); /* Move shine effect across the element */
+}
+
+.contact .right form .fields {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.contact .right form .field,
+.contact .right form .fields .field {
+  height: 45px;
+  width: 100%;
+  margin-bottom: 15px;
+  flex: 1 1 calc(50% - 20px);
+  min-width: 200px;
+}
+
+.contact .right form .textarea {
+  height: 80px;
+  width: 100%;
+}
+
+.contact .column.right .icons-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+  margin: 0px;
+  justify-content: center;
+}
+
+.contact .column.right .icons-row a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--primary-color);
+  background: var(--glass); /* Glass effect background */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+  backdrop-filter: blur(10px); /* Blur effect */
+  -webkit-backdrop-filter: blur(10px); /* Blur effect for Safari */
+  width: 70px;
+  height: 70px;
+  border-radius: 20px; /* Rounded corners */
+  border: 3px solid rgba(255, 255, 255, 0.3); /* Border for glass effect */
+  transition: all 0.3s ease; /* Smooth transitions */
+  overflow: hidden; /* Ensure no overflow */
+  position: relative;
+  margin-bottom: 25px;
+}
+
+.contact .column.right .icons-row a:hover {
+  background: var(--glass); /* Slightly brighter background on hover */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+  backdrop-filter: blur(20px); /* More blur on hover */
+  -webkit-backdrop-filter: blur(20px); /* More blur for Safari */
+  border: 3px solid var(--primary-color);
+}
+
+/* Add shine effect on hover */
+.contact .contact-content .right::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--shine), transparent);
+  transition: transform 0.5s ease; /* Smooth transition for shine effect */
+  pointer-events: none; /* Prevent interaction */
+}
+
+.contact .contact-content .right:hover::before {
+  transform: translateX(200%); /* Move shine effect across the element */
+}
+
+.contact .right form .fields {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.contact .right form .field,
+.contact .right form .fields .field {
+  height: 45px;
+  width: 100%;
+  margin-bottom: 15px;
+  flex: 1 1 calc(50% - 20px);
+  min-width: 200px;
+}
+
+.contact .right form .textarea {
+  height: 80px;
+  width: 100%;
+}
+
+.contact .column.right .icons-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+  justify-content: center;
+}
+
+.contact .column.right .icons-row a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--primary-color);
+  background: var(--glass), 0.4; /* Glass effect background */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+  backdrop-filter: blur(10px); /* Blur effect */
+  -webkit-backdrop-filter: blur(10px); /* Blur effect for Safari */
+  width: 70px;
+  height: 70px;
+  border-radius: 20px; /* Rounded corners */
+  border: 3px solid rgba(255, 255, 255, 0.46); /* Border for glass effect */
+  transition: all 0.3s ease; /* Smooth transitions */
+  overflow: hidden; /* Ensure no overflow */
+  position: relative;
+  margin-bottom: 25px;
+}
+
+.contact .column.right .icons-row a:hover {
+  background: var(--glass); /* Slightly brighter background on hover */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+  backdrop-filter: blur(20px); /* More blur on hover */
+  -webkit-backdrop-filter: blur(20px); /* More blur for Safari */
+  border: 3px solid var(--primary-color);
+}
+
+/* Add shine effect on hover */
+.contact .column.right .icons-row a::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--shine), transparent);
+  transition: transform 0.5s ease; /* Smooth transition for shine effect */
+  pointer-events: none; /* Prevent interaction */
+}
+
+.contact .column.right .icons-row a:hover::before {
+  transform: translateX(200%); /* Move shine effect across the icon */
+}
+
+.contact .right form .field input,
+.contact .right form .textarea textarea {
+  height: 100%;
+  width: 100%;
+  border: 1px solid lightgrey;
+  border-radius: 3px;
+  outline: none;
+  padding: 0 15px;
+  font-size: 17px;
+  font-family: "Poppins", sans-serif;
+  transition: all 0.3s ease;
+}
+
+.contact .right form .field input:focus,
+.contact .right form .textarea textarea:focus {
+  border-color: #b3b3b3;
+}
+
+.contact .right form .textarea textarea {
+  padding-top: 10px;
+  resize: none;
+}
+
+.contact .right form .button-area {
+  display: flex;
+  align-items: center;
+}
+
+.right form .button-area button {
+  color: var(--background-color);
+  display: block;
+  width: 160px !important;
+  height: 45px;
+  outline: none;
+  font-size: 18px;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  flex-wrap: nowrap;
+  background: var(--primary-color);
+  border: 2px solid var(--primary-color);
+  transition: all 0.3s ease;
+}
+
+.right form .button-area button:hover {
+  color: var(--primary-color);
+  background: none;
+}
+
+.footer-text {
+  margin-top: 0px;
+  padding: 23px 40px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  background: var(--glass);/* Glass effect background */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  position: relative;
+  border-radius: 20px; /* Rounded corners */
+  border: 3px solid rgba(255, 255, 255, 0.564);
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* Ensure no overflow */
+  text-align: center;
+  font-size: 27px;
+  font-family: 'CustomFont', sans-serif;
+}
+
+.footer-text:hover {
+  background: var(--glass); /* Slightly brighter background on hover */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+  backdrop-filter: blur(20px); /* More blur on hover */
+  -webkit-backdrop-filter: blur(20px); /* More blur for Safari */
+}
+.bow {
+  font-size: 40px; /* Adjust the size as needed */
+  font-weight: bold;
+  transition: transform 0.5s ease, color 0.5s ease, text-shadow 0.5s ease;
+  color: var(--primary-color);
+}
+
+.bow:hover {
+  text-shadow: 0 0 10px var(--primary-color); /* Enhanced shadow on hover */
+  color: var(--secondary-color); /* Change color on hover */
+}
+
+.footer-text::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--shine), transparent);
+  transition: transform 0.5s ease; /* Smooth transition for shine effect */
+  pointer-events: none; /* Prevent interaction */
+}
+
+.footer-text:hover::before {
+  transform: translateX(200%); /* Move shine effect across the element */
+}
+
+.footer-text a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: transform 0.5s ease, color 0.5s ease, text-shadow 0.5s ease;
+}
+
+.footer-text a:hover {
+  text-shadow: 0 0 10px var(--primary-color); /* Enhanced shadow on hover */
+}
+
+/* responsive media query start */
+@media (max-width: 1104px) {
+  .about .about-content .left img {
+    height: 300px; /* Reduced size for better fit */
+    width: 100vh; /* Maintain aspect ratio */
+  }
+}
+
+@media (max-width: 991px) {
+  .max-width {
+    padding: 0 40px; /* Adjust padding for better alignment */
+  }
+}
+
+@media (max-width: 947px) {
+  .navbar .menu {
+    position: fixed;
+    height: 100vh;
+    width: 100%;
+    left: -100%;
+    top: 0;
+    background: rgba(0, 0, 0, 0.8); /* Subtle background for visibility */
+    text-align: center;
+    padding-top: 80px;
+    visibility: hidden; /* Make it invisible */
+    pointer-events: none;
+    transition: all 0.3s ease;
+  }
+  .navbar .menu.active {
+    left: 0;
+  }
+  .navbar .menu li {
+    display: block;
+  }
+  .navbar .menu li a {
+    display: inline-block;
+    margin: 20px 0;
+    font-size: 22px; /* Slightly smaller font for better fit */
+  }
+  .home .home-content .text-2 {
+    font-size: 65px; /* Balanced for readability */
+  }
+  .home .home-content .text-3 {
+    font-size: 30px; /* Adjusted for consistency */
+  }
+  .home .home-content a {
+    font-size: 20px;
+    padding: 10px 25px; /* Reduced padding for smaller screens */
+  }
+  .max-width {
+    max-width: 900px; /* Optimized for smaller devices */
+  }
+  .about .about-content .column {
+    width: 100%;
+  }
+  .about .about-content .left {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto 40px; /* Reduced margin for compact layout */
+  }
+  .about .about-content .right {
+    flex: 100%;
+  }
+  .Hobbies .serv-content .card {
+    width: calc(50% - 10px);
+    margin-bottom: 15px; /* Tighter spacing */
+  }
+  .skills .skills-content .column,
+  .contact .contact-content .column {
+    width: 100%;
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 690px) {
+  .max-width {
+    padding: 0 20px; /* Narrower padding */
+  }
+  .home .home-content .text-2 {
+    font-size: 55px; /* Scaled down */
+  }
+  .home .home-content .text-3 {
+    font-size: 28px; /* Proportional scaling */
+  }
+  .home .home-content a {
+    font-size: 18px;
+  }
+  .Hobbies .serv-content .card {
+    width: 100%;
+  }
+}
+
+@media (max-width: 500px) {
+  .home .home-content .text-2 {
+    font-size: 45px; /* Compact for small screens */
+  }
+  .home .home-content .text-3 {
+    font-size: 24px;
+  }
+  .about .about-content .right .text,
+  .skills .skills-content .left .text {
+    font-size: 18px; /* Maintain readability */
+  }
+  .contact .right form .fields {
+    flex-direction: column;
+  }
+  .contact .right form .name,
+  .contact .right form .email {
+    margin: 0;
+  }
+  .right form .error-box {
+    width: 130px; /* Adjusted for smaller screens */
+  }
+}
+
+/* =========================================================
+   RESPONSIVE PRESERVE PATCH
+   Keeps the 1920x1080 desktop composition intact, then only
+   relaxes fixed heights/margins on smaller screens.
+   ========================================================= */
+
+/* Mobile hamburger is hidden on the original desktop layout. */
+.nav-toggle {
+  display: none;
+  border: 3px solid var(--primary-color);
+  background: var(--glass);
+  color: var(--primary-color);
+  border-radius: 8px;
+  width: 44px;
+  height: 42px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 20px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  position: relative;
+  z-index: 10001;
+}
+
+.navbar .menu li a.active-link {
+  color: var(--primary-color);
+  text-shadow: 0px 1px 3px #000000be;
+}
+
+/* The about photo should read as one bordered image, not a second bulky box. */
+.about .about-content .left {
+  flex: 0 0 min(34vw, 430px);
+  width: auto;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  overflow: visible;
+}
+
+.about .about-content .left:hover {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.about .about-content .left::before {
+  display: none;
+}
+
+.about .about-content .left img {
+  border: 3px solid rgba(255, 255, 255, 0.56);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.14);
+}
+
+/* Keep the CV buttons in a real row after fixing the invalid HTML wrapper. */
+.read-cv-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 18px;
+}
+
+.read-cv-container .read-cv,
+.read-cv-container .read-cv2 {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* Avoid sharp clipping around the project side cards on desktop/tablet. */
+.projects-container,
+.projects-container .max-width,
+.projects {
+  overflow: visible;
+}
+
+.projects .card,
+.projects .card-content,
+.card-left,
+.card-right {
+  min-width: 0;
+}
+
+.contact .column.right .icons-row a:not(.glassIco) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--primary-color);
+  background: var(--glass);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  width: 70px;
+  height: 70px;
+  border-radius: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.46);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 25px;
+}
+
+/* Laptop/tablet scaling: preserve the original composition but reduce overflow. */
+@media (max-width: 1350px) {
+  .max-width {
+    padding-left: 55px;
+    padding-right: 55px;
+  }
+
+  .navbar .logo a {
+    font-size: clamp(26px, 2.6vw, 35px);
+  }
+
+  .navbar .menu li a {
+    margin-left: clamp(12px, 1.7vw, 25px);
+    font-size: clamp(15px, 1.35vw, 18px);
+  }
+
+  .theme-toggle-btn {
+    padding: 8px 14px;
+  }
+
+  .about .about-content,
+  .skills .skills-content,
+  .contact .contact-content {
+    gap: clamp(18px, 2.2vw, 30px);
+  }
+
+  .about .about-content .right {
+    margin-left: clamp(18px, 3vw, 40px);
+  }
+
+  .about .about-content .right p,
+  .skills .skills-content .left p {
+    font-size: clamp(14px, 1.12vw, 16px);
+    line-height: 1.45;
+  }
+
+  .card-right h2 {
+    font-size: clamp(1.35rem, 2.05vw, 1.8rem);
+  }
+
+  .card-right p,
+  .card-points li {
+    font-size: clamp(14px, 1.28vw, 18px);
+  }
+
+  .explore-btn {
+    font-size: clamp(20px, 2.2vw, 30px);
+  }
+
+  .contact .contact-content {
+    margin-top: 150px;
+    padding-left: clamp(20px, 3vw, 40px);
+    padding-right: clamp(20px, 3vw, 40px);
+  }
+
+  .contact .contact-content .left {
+    margin-left: clamp(-70px, -4vw, -20px);
+  }
+
+  .contact .contact-content .right {
+    margin-right: clamp(-70px, -4vw, -20px);
+  }
+}
+
+/* Tablet and phone: stop using full-screen fixed boxes so text/images cannot overlap. */
+@media (max-width: 947px) {
+  html {
+    scroll-padding-top: 86px;
+  }
+
+  .max-width {
+    max-width: 100%;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .navbar {
+    padding: 18px 0;
+  }
+
+  .navbar.sticky {
+    padding: 9px 0;
+  }
+
+  .navbar .max-width {
+    gap: 12px;
+  }
+
+  .navbar .logo a,
+  .navbar .logo a span,
+  .navbar.sticky .logo a,
+  .navbar.sticky .logo a span {
+    color: var(--primary-color);
+    font-size: clamp(22px, 6vw, 32px);
+    text-shadow: 0px 1px 3px #000000be;
+  }
+
+  .nav-toggle {
+    display: inline-flex;
+    order: 3;
+  }
+
+  .theme-selector {
+    order: 2;
+    margin-left: auto;
+  }
+
+  .navbar .menu {
+    position: fixed;
+    top: 78px;
+    left: 50%;
+    width: min(92vw, 420px);
+    height: auto;
+    max-height: calc(100svh - 100px);
+    transform: translateX(-50%) translateY(-18px) scale(0.98);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    background: var(--glass);
+    border: 3px solid rgba(255, 255, 255, 0.55);
+    border-radius: 20px;
+    padding: 16px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.28);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    transition: all 0.25s ease;
+    z-index: 10000;
+  }
+
+  .navbar .menu.active {
+    left: 50%;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+
+  .navbar .menu li {
+    display: block;
+  }
+
+  .navbar .menu li a {
+    margin: 8px 0;
+    padding: 12px 14px;
+    width: 100%;
+    display: block;
+    border-radius: 12px;
+    color: var(--text-alt);
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .navbar .menu li a:hover,
+  .navbar .menu li a.active-link {
+    color: var(--primary-color);
+    background: rgba(255, 255, 255, 0.22);
+  }
+
+  .theme-toggle-btn {
+    position: relative;
+    top: auto;
+    right: auto;
+    margin-top: 0;
+    width: 42px;
+    height: 42px;
+  }
+
+  .theme-dropdown {
+    right: 0;
+    top: 52px;
+    width: min(82vw, 270px);
+    max-height: 68svh !important;
+    overflow-y: auto !important;
+  }
+
+  .about-container,
+  .Hobbies-container,
+  .skills-container,
+  .projects-container,
+  .contact-container {
+    width: 100%;
+    height: auto;
+    min-height: 100svh;
+    margin-top: 0;
+    padding: 92px 12px 34px;
+    overflow: visible;
+  }
+
+  .about,
+  .skills,
+  .contact {
+    width: 100%;
+    height: auto;
+    min-height: calc(100svh - 126px);
+    padding: 28px 16px;
+    overflow: visible;
+  }
+
+  .about .title,
+  .skills .title,
+  .contact .title,
+  .projects-container .title,
+  .Hobbies .title {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    margin: 0 0 10px;
+    font-size: clamp(32px, 8vw, 42px);
+  }
+
+  .about .sub,
+  .skills .sub,
+  .contact .sub,
+  .projects-container .sub,
+  .Hobbies .sub,
+  .sub {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    margin: 0 auto 26px;
+    white-space: nowrap;
+  }
+
+  .about .about-content,
+  .skills .skills-content,
+  .contact .contact-content,
+  .Hobbies .serv-content {
+    margin-top: 0;
+    padding: 0;
+    height: auto;
+    align-items: stretch;
+  }
+
+  .about .about-content {
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .about .about-content .left {
+    flex: none;
+    width: 100%;
+    margin: 0 auto;
+    justify-content: center;
+  }
+
+  .about .about-content .left img {
+    width: min(100%, 390px);
+    max-width: 390px;
+  }
+
+  .about .about-content .right {
+    margin-left: 0;
+    flex: none;
+    width: 100%;
+  }
+
+  .about .about-content .right .text {
+    font-size: clamp(22px, 5.5vw, 28px);
+    text-align: center;
+  }
+
+  .about .about-content .right p,
+  .skills .skills-content .left p {
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  .about .about-content .right a {
+    display: table;
+    margin: 20px auto 0;
+  }
+
+  .Hobbies-container {
+    justify-content: flex-start;
+  }
+
+  .Hobbies .serv-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+    width: 100%;
+  }
+
+  .Hobbies .serv-content .card,
+  .Favourites .serv-content .card {
+    width: 100%;
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 34px 20px;
+    min-height: auto;
+  }
+
+  .Hobbies .serv-content .card .box,
+  .Favourites .serv-content .card .box {
+    margin-top: 0;
+  }
+
+  .Hobbies .serv-content .card i,
+  .Favourites .serv-content .card i {
+    font-size: clamp(58px, 16vw, 84px);
+  }
+
+  .skills .skills-content {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .skills .skills-content .column {
+    width: 100%;
+  }
+
+  .skills .skills-content .left .text {
+    text-align: center;
+  }
+
+  .skills .skills-content .right .info {
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .skills .skills-content .right span {
+    font-size: 14px;
+  }
+
+  .read-cv-container {
+    justify-content: center;
+  }
+
+  .projects-container {
+    gap: 10px;
+    margin-top: 0;
+    justify-content: flex-start;
+  }
+
+  .projects-container .max-width {
+    margin-top: 0;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .projects {
+    height: auto;
+    min-height: 640px;
+    width: 100%;
+    overflow: visible;
+    touch-action: pan-y;
+  }
+
+  .projects .card {
+    width: min(92vw, 520px);
+    height: auto;
+    min-height: 600px;
+    margin-top: 0;
+    padding: 0;
+    border-radius: 22px;
+  }
+
+  .projects .card-content {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+  }
+
+  .card-left {
+    flex: none;
+    height: auto;
+    padding: 18px;
+    gap: 16px;
+  }
+
+  .card-left img {
+    max-width: 100%;
+    margin-top: 0;
+    max-height: 210px;
+    object-fit: contain;
+  }
+
+  .explore-btn {
+    margin-bottom: 0;
+    font-size: 20px;
+    padding: 10px 16px;
+  }
+
+  .card-right {
+    flex: none;
+    padding: 18px 20px 24px;
+    gap: 12px;
+  }
+
+  .card-right h2 {
+    font-size: clamp(22px, 6vw, 30px);
+  }
+
+  .card-right p,
+  .card-points li {
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .card-points {
+    padding-top: 4px;
+  }
+
+  .navigation-dots {
+    margin-top: 0;
+    padding-bottom: 10px;
+  }
+
+  .dot {
+    margin-top: 0;
+  }
+
+  .contact .contact-content {
+    flex-direction: column;
+    gap: 22px;
+    margin-top: 0;
+    padding: 0;
+  }
+
+  .contact .contact-content .column.left,
+  .contact .contact-content .column.right,
+  .contact .contact-content .left,
+  .contact .contact-content .right {
+    width: 100%;
+    margin: 0;
+    padding: 20px;
+    flex: none;
+  }
+
+  .contact .contact-content .text {
+    font-size: clamp(28px, 8vw, 36px);
+    text-align: center;
+  }
+
+  .contact .contact-content .row {
+    min-height: 92px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+
+  .contact .contact-content .row .info {
+    margin-left: 18px;
+    min-width: 0;
+  }
+
+  .contact .contact-content .info .sub-title {
+    word-break: break-word;
+  }
+
+  .contact .column.right .icons-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(64px, 1fr));
+    gap: 16px;
+    width: 100%;
+    justify-items: center;
+  }
+
+  .contact .column.right .icons-row a,
+  .contact .column.right .icons-row a:not(.glassIco) {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 0;
+  }
+
+  .contact .column.right .icons-row a i {
+    font-size: 42px !important;
+  }
+
+  .footer-text {
+    margin-top: 20px;
+    padding: 20px;
+    font-size: clamp(22px, 6vw, 28px);
+    line-height: 1.35;
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .max-width {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .navbar .max-width {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .navbar .logo a,
+  .navbar .logo a span,
+  .navbar.sticky .logo a,
+  .navbar.sticky .logo a span {
+    font-size: clamp(20px, 5.7vw, 26px);
+  }
+
+  .theme-selector {
+    margin-left: 0;
+  }
+
+  .theme-toggle-btn,
+  .nav-toggle {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+  }
+
+  .about-container,
+  .Hobbies-container,
+  .skills-container,
+  .projects-container,
+  .contact-container {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .about,
+  .skills,
+  .contact {
+    border-radius: 18px;
+    padding: 24px 12px;
+  }
+
+  .about .about-content .right p,
+  .skills .skills-content .left p {
+    font-size: 14px;
+  }
+
+  .projects {
+    min-height: 690px;
+  }
+
+  .projects .card {
+    width: 92vw;
+    min-height: 650px;
+  }
+
+  .card-left img {
+    max-height: 180px;
+  }
+
+  .contact .column.right .icons-row {
+    grid-template-columns: repeat(2, minmax(64px, 1fr));
+  }
+
+  .contact .contact-content .row {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 380px) {
+  .navbar .logo a,
+  .navbar .logo a span,
+  .navbar.sticky .logo a,
+  .navbar.sticky .logo a span {
+    font-size: 18px;
+  }
+
+  .projects {
+    min-height: 730px;
+  }
+
+  .projects .card {
+    min-height: 700px;
+  }
+
+  .card-right p,
+  .card-points li {
+    font-size: 14px;
+  }
+}
+
+/* =========================================================
+   FINAL PRECISION PATCH FROM SCREENSHOT NOTES
+   - Keeps original desktop home composition unchanged
+   - Fixes nav-click alignment using dynamic navbar height
+   - Prevents mobile project/hobby card overlap
+   - Restores subtitle side bars inside the section frame
+   - Aligns desktop CV buttons and wraps contact footer cleanly
+   ========================================================= */
+
+:root {
+  --site-nav-height: 82px;
+}
+
+#about,
+#Hobbies,
+#skills,
+#projects,
+#contact {
+  scroll-margin-top: calc(var(--site-nav-height) + 12px);
+}
+
+/* Keep the rocket consistently inside the visible page frame. */
+.scroll-up-btn {
+  right: clamp(18px, 2vw, 30px);
+  bottom: clamp(18px, 2vw, 30px);
+}
+
+.scroll-up-btn.show {
+  bottom: clamp(24px, 2.6vw, 34px);
+}
+
+/* Desktop skills buttons: same row, same visual width, no awkward gap. */
+@media (min-width: 948px) {
+  .skills .skills-content .right {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .skills .skills-content .right .bars {
+    width: 100%;
+  }
+
+  .read-cv-container {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(10px, 1vw, 16px);
+    justify-content: stretch;
+    align-items: stretch;
+    margin-top: 16px;
+  }
+
+  .read-cv-container .read-cv,
+  .read-cv-container .read-cv2 {
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 10px 12px;
+    text-align: center;
+    white-space: nowrap;
+    font-size: clamp(13px, 1.05vw, 17px);
+  }
+}
+
+/* Contact footer structure: desktop stays one clean line where space allows. */
+.footer-text {
+  overflow-wrap: normal;
+  word-break: normal;
+  text-wrap: balance;
+}
+
+.footer-text a {
+  white-space: nowrap;
+}
+
+/* Tablet/mobile title bars: remove the old absolute left/right offsets that pushed bars outside the frame. */
+@media (max-width: 947px) {
+  .about .sub,
+  .skills .sub,
+  .contact .sub,
+  .projects-container .sub,
+  .Hobbies .sub,
+  .sub {
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(8px, 2.4vw, 12px);
+    padding: 0 clamp(8px, 2vw, 12px);
+    overflow: hidden;
+  }
+
+  .about .sub::before,
+  .about .sub::after,
+  .skills .sub::before,
+  .skills .sub::after,
+  .contact .sub::before,
+  .contact .sub::after,
+  .projects-container .sub::before,
+  .projects-container .sub::after,
+  .Hobbies .sub::before,
+  .Hobbies .sub::after,
+  .Favourites .sub::before,
+  .Favourites .sub::after {
+    position: static !important;
+    left: auto !important;
+    right: auto !important;
+    top: auto !important;
+    width: auto !important;
+    max-width: clamp(30px, 11vw, 46px) !important;
+    min-width: clamp(28px, 9vw, 42px) !important;
+    height: 0 !important;
+    max-height: none !important;
+    flex: 0 1 clamp(28px, 11vw, 46px) !important;
+    margin: 0 !important;
+    background: transparent !important;
+    border-bottom: 3.5px solid var(--text-alt) !important;
+  }
+
+  /* Section target boxes should start cleanly below the fixed nav, not halfway under it. */
+  .about-container,
+  .Hobbies-container,
+  .skills-container,
+  .projects-container,
+  .contact-container {
+    padding-top: calc(var(--site-nav-height) + 22px);
+  }
+
+  .about,
+  .skills,
+  .contact {
+    min-height: auto;
+  }
+
+  /* Hobbies: compact mobile cards that stack normally and never overlap each other. */
+  .Hobbies .serv-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 22px;
+    align-items: stretch;
+    overflow: visible;
+  }
+
+  .Hobbies .serv-content .card,
+  .Favourites .serv-content .card {
+    position: relative;
+    width: min(100%, 620px);
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    margin: 0 auto;
+    padding: 28px 18px;
+    overflow: hidden;
+  }
+
+  .Hobbies .serv-content .card .box,
+  .Favourites .serv-content .card .box {
+    margin-top: 0 !important;
+    transform: none !important;
+  }
+
+  .Hobbies .serv-content .card:hover .box,
+  .Favourites .serv-content .card:hover .box {
+    transform: none !important;
+  }
+
+  .Hobbies .serv-content .card i,
+  .Favourites .serv-content .card i {
+    font-size: clamp(48px, 13vw, 68px);
+    line-height: 1;
+  }
+
+  .Hobbies .serv-content .card .text,
+  .Favourites .serv-content .card .text {
+    font-size: clamp(24px, 6vw, 34px);
+    line-height: 1.2;
+    margin: 16px 0 10px;
+  }
+
+  .Hobbies .serv-content .card p,
+  .Favourites .serv-content .card p {
+    font-size: clamp(14px, 3.8vw, 17px);
+    line-height: 1.45;
+    margin: 0;
+  }
+
+  /* Projects: uniform mobile card sizing, smaller inner elements, dots stay below the card. */
+  .projects-container {
+    min-height: auto;
+    overflow: visible;
+    padding-bottom: 44px;
+  }
+
+  .projects-container .max-width {
+    overflow: visible;
+  }
+
+  .projects {
+    height: clamp(620px, 168vw, 735px);
+    min-height: 0;
+    align-items: flex-start;
+    overflow: visible;
+    touch-action: pan-y;
+  }
+
+  .projects .card {
+    width: min(90vw, 500px);
+    height: 100%;
+    min-height: 0;
+    max-height: none;
+    margin-top: 0;
+    padding: 0;
+    border-radius: 22px;
+    overflow: hidden;
+  }
+
+  .projects .card-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    height: auto;
+  }
+
+  .projects .card-left {
+    flex: none;
+    height: auto;
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .projects .card-left img {
+    width: 100%;
+    max-height: clamp(110px, 30vw, 165px);
+    margin: 0;
+    object-fit: contain;
+  }
+
+  .projects .explore-btn {
+    margin: 0;
+    padding: 9px 14px;
+    font-size: clamp(16px, 4.5vw, 20px);
+    line-height: 1.15;
+  }
+
+  .projects .card-right {
+    flex: none;
+    padding: 16px 18px 18px;
+    gap: 9px;
+  }
+
+  .projects .card-right h2 {
+    font-size: clamp(20px, 5.4vw, 28px);
+    line-height: 1.25;
+    margin: 0;
+  }
+
+  .projects .card-right p {
+    font-size: clamp(13px, 3.5vw, 15px);
+    line-height: 1.38;
+    text-align: left;
+    margin: 0;
+  }
+
+  .projects .card-points {
+    padding-top: 2px;
+    margin: 0;
+  }
+
+  .projects .card-points li {
+    font-size: clamp(13px, 3.5vw, 15px);
+    line-height: 1.35;
+    margin: 4px 0;
+  }
+
+  .navigation-dots {
+    position: relative;
+    margin-top: 10px;
+    padding-bottom: 18px;
+    z-index: 20;
+  }
+
+  .navigation-dots .dot,
+  .dot {
+    margin-top: 0 !important;
+  }
+
+  /* Mobile contact footer: keep "Bipin Chowdary" together on its own line. */
+  .footer-text {
+    width: 100%;
+    max-width: 100%;
+    padding: 18px 14px;
+    font-size: clamp(24px, 7vw, 30px);
+    line-height: 1.28;
+    text-align: center;
+  }
+
+  .footer-text .footer-prefix,
+  .footer-text a,
+  .footer-text .footer-rights {
+    display: block;
+  }
+
+  .footer-text a {
+    white-space: nowrap;
+  }
+
+  .contact .contact-content .info .sub-title {
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (max-width: 600px) {
+  .about-container,
+  .Hobbies-container,
+  .skills-container,
+  .projects-container,
+  .contact-container {
+    padding-top: calc(var(--site-nav-height) + 24px);
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .about,
+  .skills,
+  .contact {
+    padding: 26px 12px 30px;
+  }
+
+  .about .about-content .left img {
+    width: min(100%, 340px);
+  }
+
+  .projects {
+    height: clamp(650px, 176vw, 725px);
+  }
+
+  .projects .card {
+    width: min(88vw, 360px);
+  }
+
+  .projects .card-left {
+    padding: 12px;
+  }
+
+  .projects .card-left img {
+    max-height: 122px;
+  }
+
+  .projects .card-right {
+    padding: 14px 17px 16px;
+    gap: 8px;
+  }
+
+  .contact .column.right .icons-row {
+    grid-template-columns: repeat(2, minmax(64px, 1fr));
+    gap: 18px 28px;
+    justify-items: center;
+  }
+}
+
+@media (max-width: 430px) {
+  .projects {
+    height: 705px;
+  }
+
+  .projects .card-left img {
+    max-height: 110px;
+  }
+
+  .projects .card-right h2 {
+    font-size: 21px;
+  }
+
+  .projects .card-right p,
+  .projects .card-points li {
+    font-size: 13px;
+    line-height: 1.35;
+  }
+
+  .Hobbies .serv-content .card,
+  .Favourites .serv-content .card {
+    padding: 24px 16px;
+  }
+}
+
+@media (max-width: 380px) {
+  .projects {
+    height: 720px;
+  }
+
+  .projects .card-right h2 {
+    font-size: 19px;
+  }
+
+  .projects .card-right p,
+  .projects .card-points li {
+    font-size: 12.5px;
+  }
+
+  .footer-text {
+    font-size: 23px;
+  }
+}
+
+/* =========================================================
+   FINAL PROJECT CARD 16:9 STABILITY PATCH
+   - Keeps the original desktop composition intact
+   - Makes every project image area a true 16:9 image border
+   - Removes the extra boxed look around the mobile image area
+   - Locks mobile project card structure so slides do not jump
+   - Keeps navigation dots below the card, never overlapped
+   ========================================================= */
+
+.projects .card-left img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 12px;
+  border: 3px solid rgba(255, 255, 255, 0.62);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.18);
+}
+
+@media (min-width: 948px) {
+  .projects .card-left {
+    justify-content: center;
+  }
+
+  .projects .card-left img {
+    max-width: min(500px, 92%);
+    max-height: none;
+  }
+}
+
+@media (max-width: 947px) {
+  .projects-container {
+    padding-bottom: 56px;
+  }
+
+  .projects {
+    width: 100%;
+    height: clamp(760px, 190vw, 835px) !important;
+    min-height: 0 !important;
+    align-items: flex-start;
+    overflow: visible;
+    touch-action: pan-y;
+  }
+
+  .projects .card {
+    width: min(90vw, 500px) !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    margin-top: 0 !important;
+    padding: 0 !important;
+    border-radius: 24px !important;
+    overflow: hidden !important;
+  }
+
+  .projects .card-content {
+    height: 100% !important;
+    display: grid !important;
+    grid-template-rows: auto minmax(0, 1fr);
+    align-items: stretch !important;
+  }
+
+  .projects .card-left {
+    height: auto !important;
+    flex: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 14px !important;
+    padding: 16px 16px 14px !important;
+    background: transparent !important;
+  }
+
+  .projects .card-left img {
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: none !important;
+    height: auto !important;
+    aspect-ratio: 16 / 9 !important;
+    object-fit: cover !important;
+    margin: 0 !important;
+    border-radius: 14px !important;
+  }
+
+  .projects .explore-btn {
+    flex: 0 0 auto !important;
+    margin: 0 !important;
+    padding: 10px 18px !important;
+    font-size: clamp(18px, 5vw, 22px) !important;
+    line-height: 1.15 !important;
+    border-radius: 9px !important;
+  }
+
+  .projects .card-right {
+    min-height: 0 !important;
+    flex: none !important;
+    display: grid !important;
+    grid-template-rows: auto auto auto;
+    align-content: start;
+    gap: 12px !important;
+    padding: 18px 20px 22px !important;
+    overflow: hidden !important;
+  }
+
+  .projects .card-right h2 {
+    font-size: clamp(22px, 5.8vw, 31px) !important;
+    line-height: 1.22 !important;
+    margin: 0 !important;
+  }
+
+  .projects .card-right p {
+    font-size: clamp(14px, 3.75vw, 16px) !important;
+    line-height: 1.42 !important;
+    text-align: left !important;
+    margin: 0 !important;
+  }
+
+  .projects .card-points {
+    padding: 0 !important;
+    margin: 2px 0 0 !important;
+    overflow: visible !important;
+  }
+
+  .projects .card-points li {
+    font-size: clamp(14px, 3.75vw, 16px) !important;
+    line-height: 1.35 !important;
+    margin: 7px 0 !important;
+  }
+
+  .navigation-dots {
+    position: relative !important;
+    margin-top: 18px !important;
+    padding-bottom: 22px !important;
+    z-index: 30 !important;
+  }
+
+  .navigation-dots .dot,
+  .dot {
+    margin-top: 0 !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .projects {
+    height: clamp(755px, 192vw, 825px) !important;
+  }
+
+  .projects .card {
+    width: min(88vw, 380px) !important;
+  }
+
+  .projects .card-left {
+    padding: 14px 14px 12px !important;
+    gap: 12px !important;
+  }
+
+  .projects .card-right {
+    padding: 17px 18px 21px !important;
+    gap: 10px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .projects {
+    height: 785px !important;
+  }
+
+  .projects .card-right h2 {
+    font-size: 23px !important;
+  }
+
+  .projects .card-right p,
+  .projects .card-points li {
+    font-size: 14.2px !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .projects {
+    height: 800px !important;
+  }
+
+  .projects .card-right h2 {
+    font-size: 21px !important;
+  }
+
+  .projects .card-right p,
+  .projects .card-points li {
+    font-size: 13.2px !important;
+  }
+}
+
+
+/* =========================================================
+   PERFORMANCE OPTIMIZATION PATCH
+   Keeps the current visual design, but reduces layout, paint,
+   animation, and GPU pressure across desktop and mobile.
+   ========================================================= */
+:root {
+  --site-nav-height: 82px;
+}
+
+html {
+  scroll-padding-top: calc(var(--site-nav-height) + 10px);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+#neuro {
+  contain: strict;
+  will-change: opacity;
+}
+
+.navbar,
+.theme-toggle-btn,
+.theme-option,
+.scroll-up-btn,
+.home .home-content a,
+.about,
+.Hobbies .serv-content .card,
+.skills,
+.projects .card,
+.contact,
+.glassIco,
+.footer-text,
+.read-cv,
+.read-cv2,
+.explore-btn {
+  transition-property: color, background-color, background, border-color, box-shadow, transform, opacity, filter;
+}
+
+.about,
+.Hobbies .serv-content .card,
+.skills,
+.projects .card,
+.contact,
+.contact .contact-content .column,
+.footer-text {
+  contain: layout paint;
+}
+
+.projects {
+  contain: layout;
+}
+
+.projects .card {
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+}
+
+.projects .card:not(.active) {
+  pointer-events: none;
+}
+
+.projects .card.active {
+  pointer-events: auto;
+}
+
+.images img,
+.projects .card-left img,
+.about .about-content .left img {
+  backface-visibility: hidden;
+}
+
+.theme-selector.is-open .theme-dropdown {
+  max-height: 500px;
+  opacity: 1;
+  visibility: visible;
+  overflow: auto;
+}
+
+@media (max-width: 947px) {
+  .navbar.sticky,
+  .theme-dropdown,
+  .theme-toggle-btn,
+  .about,
+  .Hobbies .serv-content .card,
+  .skills,
+  .projects .card,
+  .contact,
+  .contact .contact-content .column,
+  .footer-text {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .projects .card:not(.active) {
+    visibility: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  #neuro {
+    opacity: 0.85;
+  }
+}
